@@ -1,8 +1,8 @@
 """
-Smartwatch Scraper for Best Buy Canada
+Scraper for Best Buy
 
-This script is specifically optimized to scrape smartwatch products from Best Buy Canada.
-It addresses the specific structure of the smartwatch category page.
+This script is specifically optimized to scrape products from Best Buy
+It addresses the specific structure of the category page.
 """
 import argparse
 import asyncio
@@ -61,23 +61,23 @@ logger.propagate = False
 # Ensure the data directory exists
 Path(os.path.dirname(DATA_PATHS["scraped_data"])).mkdir(parents=True, exist_ok=True)
 
-async def scrape_products(count: int = 10, headless: bool = True, source: str = "Best Buy Canada") -> List[Dict]:
+async def scrape_products(count: int = 10, headless: bool = True, source: str = "BestBuy") -> List[Dict]:
     """
-    Scrape smartwatch products from Best Buy Canada.
+    Scrape products from Best Buy
     
     Args:
         count: Number of products to scrape
         headless: Whether to run the browser in headless mode
-        source: Source name to include in product data (default: Best Buy Canada)
+        source: Source name to include in product data (default: Best Buy)
         
     Returns:
         A list of dictionaries containing product data
     """
-    logger.info(f"Starting Best Buy smartwatch scraper")
+    logger.info(f"Starting scraper")
     products = []
     
-    # Get the smartwatch category URL
-    category_url = SCRAPER_CONFIG["BESTBUY"]["categories"][0]["url"]
+    # Get the category URL
+    category_url = SCRAPER_CONFIG[source]["categories"][0]["url"]
     
     # Store source as a function attribute to pass it to scrape_product_details
     scrape_product_details.source = source
@@ -85,18 +85,18 @@ async def scrape_products(count: int = 10, headless: bool = True, source: str = 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=headless)
         context = await browser.new_context(
-            user_agent=SCRAPER_CONFIG["BESTBUY"]["user_agent"],
+            user_agent=SCRAPER_CONFIG[source]["user_agent"],
             viewport={"width": 1920, "height": 1080},
         )
         
         # Add headers to all requests
-        await context.set_extra_http_headers(SCRAPER_CONFIG["BESTBUY"]["headers"])
+        await context.set_extra_http_headers(SCRAPER_CONFIG[source]["headers"])
         
         # Create a new page
         page = await context.new_page()
         
         try:
-            # Navigate to the smartwatch category page
+            # Navigate to the category page
             logger.info(f"Navigating to: {category_url}")
             await page.goto(category_url, timeout=60000)
             
@@ -368,7 +368,7 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                         if len(text) > 100 and len(text) < 2000:
                             # Check if it has keywords that suggest it's a product description
                             text_lower = text.lower()
-                            if any(keyword in text_lower for keyword in ["features", "designed", "smartwatch", "watch", "track", "monitor", "battery", "display"]):
+                            if any(keyword in text_lower for keyword in ["features", "designed", "watch", "track", "monitor", "battery", "display"]):
                                 description = text
                                 logger.info("Found description in generic div with product-related content")
                                 break
@@ -397,47 +397,6 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
             if not description:
                 logger.warning("No product description found")
             
-            # 4. Specifications
-            specs = {}
-            
-            # Try to click on specifications tab if it exists
-            spec_tab_selectors = [
-                "button[data-automation='specifications-tab']",
-                "button:has-text('Specifications')",
-                "button:has-text('Specs')"
-            ]
-            
-            for selector in spec_tab_selectors:
-                try:
-                    spec_tab = await page.query_selector(selector)
-                    if spec_tab:
-                        await spec_tab.click()
-                        await page.wait_for_timeout(1000)  # Wait for specs to load
-                        break
-                except Exception:
-                    continue
-            
-            # Look for specifications in table format
-            spec_table_selectors = [
-                "table.specifications",
-                "div[data-automation='specifications-content'] table"
-            ]
-            
-            for table_selector in spec_table_selectors:
-                spec_rows = await page.query_selector_all(f"{table_selector} tr")
-                if spec_rows and len(spec_rows) > 0:
-                    for row in spec_rows:
-                        try:
-                            name_elem = await row.query_selector("td:first-child, th:first-child")
-                            value_elem = await row.query_selector("td:nth-child(2), th:nth-child(2)")
-                            
-                            if name_elem and value_elem:
-                                name = await name_elem.inner_text()
-                                value = await value_elem.inner_text()
-                                if name.strip() and value.strip():
-                                    specs[name.strip()] = value.strip()
-                        except Exception:
-                            continue
             
             # # 5. Rating
             # rating = "Not rated"
@@ -504,25 +463,10 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                     continue
             
             if rating == "Not rated":
-                logger.info(f"No rating found for product: {title}")
+                logger.info(f"❌ No rating found for product: {title}")
             else:
                 logger.info(f"✅ Successfully extracted final rating: '{rating}'")
             
-            # 6. Image URL
-            image_url = ""
-            image_selectors = [
-                "img[data-automation='image-gallery-main-image']",
-                ".productGallery_1jeLb img",
-                ".gallery_1nJpr img"
-            ]
-            
-            for selector in image_selectors:
-                image_element = await page.query_selector(selector)
-                if image_element:
-                    src = await image_element.get_attribute("src")
-                    if src:
-                        image_url = src
-                        break
             
             # Extract product ID from URL
             product_id = ""
@@ -552,7 +496,7 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                     break
                     
             # Get source from function parameter via closure
-            source = getattr(scrape_product_details, 'source', "Best Buy Canada")
+            source = getattr(scrape_product_details, 'source', "Best Buy")
             
             # Create product data dictionary using values from SCRAPER_CONFIG
             product_data = {
@@ -602,18 +546,18 @@ async def main():
     """
     Main function to run the scraper.
     """
-    parser = argparse.ArgumentParser(description="Scrape products from Best Buy Canada")
+    parser = argparse.ArgumentParser(description="Scrape products from Best Buy")
     parser.add_argument("--count", type=int, default=10, help="Number of products to scrape")
     parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
     parser.add_argument("--visible", action="store_false", dest="headless", help="Run browser in visible mode")
-    parser.add_argument("--source", type=str, default="Best Buy Canada", help="Source name to include in product data")
+    parser.add_argument("--source", type=str, default="BestBuy", help="Source name to include in product data")
     
     args = parser.parse_args()
     
     products = await scrape_products(count=args.count, headless=args.headless, source=args.source)
     
     if products:
-        print(f"\nSuccessfully scraped {len(products)} products from Best Buy Canada.")
+        print(f"\nSuccessfully scraped {len(products)} products from Best Buy")
         print(f"Data saved to {DATA_PATHS['scraped_data']}")
     else:
         print("No products were scraped. Check the logs for details.")

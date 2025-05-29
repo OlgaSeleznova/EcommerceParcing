@@ -18,7 +18,7 @@ LOGS_DIR.mkdir(exist_ok=True)
 
 # Scraper Configuration
 SCRAPER_CONFIG = {
-    "BESTBUY": {
+    "BestBuy": {
         "base_url": "https://bestbuy.ca",
         "search_url": "https://www.bestbuy.ca/en-ca/search?searchTerm={query}",
         "categories": [
