@@ -5,10 +5,9 @@ Product Category: Smartwatches
 For each product, extract:
 - Product title
 - Price
-- Description/specifications
+- Description
 - Product URL
 - Product rating  
-# - Image URL (optional)
 
 TDD tests should check:
 1. At least 10 products are scraped

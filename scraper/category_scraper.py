@@ -151,7 +151,7 @@ async def scrape_products(count: int = 10, headless: bool = True, source: str = 
                                         if href.startswith("http"):
                                             product_links.append(href)
                                         else:
-                                            product_links.append(f"{SCRAPER_CONFIG['BESTBUY']['base_url']}{href}")
+                                            product_links.append(f"{SCRAPER_CONFIG[source]['base_url']}{href}")
                                     break
                         except Exception as e:
                             logger.warning(f"Error extracting link: {e}")
@@ -480,12 +480,15 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                 import hashlib
                 product_id = hashlib.md5(url.encode()).hexdigest()[:10]
             
+            # Get source from function parameter via closure first, before accessing config
+            source = getattr(scrape_product_details, 'source', "BestBuy")
+            
             # Find category slug from URL based on current config structure
             category_slug = "unknown"
             
             # Try to match the URL with category URLs in the config
             # The categories are now in a list instead of a dictionary
-            for category in SCRAPER_CONFIG["BESTBUY"]["categories"]:
+            for category in SCRAPER_CONFIG[source]["categories"]:
                 category_url = category["url"]
                 # Check if the category URL is part of the product URL or vice versa
                 # Also extract the domain part for matching (e.g., bestbuy.ca/en-ca/category)
@@ -494,20 +497,15 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                     category_slug = category["slug"]
                     logger.info(f"Detected category: {category_slug}")
                     break
-                    
-            # Get source from function parameter via closure
-            source = getattr(scrape_product_details, 'source', "Best Buy")
             
             # Create product data dictionary using values from SCRAPER_CONFIG
             product_data = {
-                "id": f"{SCRAPER_CONFIG['BESTBUY']['base_url'].split('://')[1].split('.')[0]}-{product_id}",
+                "id": f"{SCRAPER_CONFIG[source]['base_url'].split('://')[1].split('.')[0]}-{product_id}",
                 "title": title,
                 "price": price,
                 "description": description,
-                "specifications": specs,
                 "url": url,
                 "rating": rating,
-                "image_url": image_url,
                 "source": source,
                 "category": category_slug,
                 "scraped_at": datetime.now().isoformat(),
