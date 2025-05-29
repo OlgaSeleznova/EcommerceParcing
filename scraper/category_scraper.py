@@ -23,22 +23,52 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import SCRAPER_CONFIG, DATA_PATHS, LOGGING_CONFIG
 
 # Set up logging
-logging.basicConfig(
-    level=getattr(logging, LOGGING_CONFIG["level"]),
-    format=LOGGING_CONFIG["format"],
-)
 logger = logging.getLogger(__name__)
+logger.setLevel(getattr(logging, LOGGING_CONFIG["level"]))
+
+# Create formatter
+formatter = logging.Formatter(LOGGING_CONFIG["format"])
+
+# Create console handler and set level
+console_handler = logging.StreamHandler()
+console_handler.setLevel(getattr(logging, LOGGING_CONFIG["level"]))
+console_handler.setFormatter(formatter)
+
+# Create file handler and set level
+log_file = LOGGING_CONFIG.get("file")
+if log_file:
+    # Create logs directory if it doesn't exist
+    log_dir = os.path.dirname(log_file)
+    os.makedirs(log_dir, exist_ok=True)
+    
+    # Add timestamp to log filename to create unique logs for each run
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_filename = f"scraper_{timestamp}.log"
+    log_path = os.path.join(log_dir, log_filename)
+    
+    file_handler = logging.FileHandler(log_path)
+    file_handler.setLevel(getattr(logging, LOGGING_CONFIG["level"]))
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    logger.info(f"Logging to file: {log_path}")
+
+# Add console handler to logger
+logger.addHandler(console_handler)
+
+# Prevent logs from being propagated to the root logger
+logger.propagate = False
 
 # Ensure the data directory exists
 Path(os.path.dirname(DATA_PATHS["scraped_data"])).mkdir(parents=True, exist_ok=True)
 
-async def scrape_smartwatches(count: int = 10, headless: bool = True) -> List[Dict]:
+async def scrape_products(count: int = 10, headless: bool = True, source: str = "Best Buy Canada") -> List[Dict]:
     """
     Scrape smartwatch products from Best Buy Canada.
     
     Args:
         count: Number of products to scrape
         headless: Whether to run the browser in headless mode
+        source: Source name to include in product data (default: Best Buy Canada)
         
     Returns:
         A list of dictionaries containing product data
@@ -47,7 +77,10 @@ async def scrape_smartwatches(count: int = 10, headless: bool = True) -> List[Di
     products = []
     
     # Get the smartwatch category URL
-    category_url = SCRAPER_CONFIG["BESTBUY"]["categories"]["smartwatches"]["url"]
+    category_url = SCRAPER_CONFIG["BESTBUY"]["categories"][0]["url"]
+    
+    # Store source as a function attribute to pass it to scrape_product_details
+    scrape_product_details.source = source
     
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=headless)
@@ -207,26 +240,79 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                 logger.warning(f"Could not find title for {url}")
                 continue
             
+            # # 2. Price
+            # price = ""
+            # price_selectors = [
+            #     "span[data-automation='product-price']",
+            #     ".price_FHDfG",
+            #     ".large-price_3CcV5",
+            #     "span[data-automation='product-price'] div[class*='price']"
+            # ]
+            # for selector in price_selectors:
+            #     price_element = await page.query_selector(selector)
+            #     if price_element:
+            #         price_text = await price_element.inner_text()
+            #         if price_text:
+            #             # Simple direct cleaning of the price text
+            #             price = price_text.strip()
+            #             # Remove currency symbols and formatting characters
+            #             # price = price.replace("$", "").replace("CAD", "").replace(",", "").strip()
+            #             logger.info(f"Extracted price: {price} from text: {price_text}")
+            #             break
+
             # 2. Price
             price = ""
+            logger.info(f"Starting price extraction for product: {title}")
             price_selectors = [
                 "span[data-automation='product-price']",
                 ".price_FHDfG",
-                ".large-price_3CcV5"
+                ".large-price_3CcV5",
+                "span[data-automation='product-price'] div[class*='price']",
+                ".pricingContainer_Po8VO span",
+                ".priceContainer_1BHcQ span",
+                ".pricing_LfYWF span"
             ]
+            
+            # Log all selectors we're trying
+            logger.debug(f"Price selectors to try: {', '.join(price_selectors)}")
+            
             for selector in price_selectors:
-                price_element = await page.query_selector(selector)
-                if price_element:
-                    price_text = await price_element.inner_text()
-                    if price_text:
-                        # Clean up price (remove $ and commas)
-                        import re
-                        price_match = re.search(r'\\$?(\\d[\\d,.]*)', price_text)
-                        if price_match:
-                            price = price_match.group(1).replace(",", "").replace("$", "")
+                try:
+                    logger.debug(f"Trying price selector: {selector}")
+                    price_element = await page.query_selector(selector)
+                    if price_element:
+                        price_text = await price_element.inner_text()
+                        logger.debug(f"Found element with selector {selector}, text content: '{price_text}'")
+                        
+                        if price_text:
+                            # Simple direct cleaning of the price text
+                            price = price_text.strip()
+                            logger.info(f"Extracted price: '{price}' from text: '{price_text}' using selector: {selector}")
+                            
+                            # Check if the price looks valid (contains $ or digits)
+                            if '$' in price or any(c.isdigit() for c in price):
+                                logger.info(f"✓ Price validation passed: '{price}' contains expected characters")
+                            else:
+                                logger.warning(f"⚠️ Price validation warning: '{price}' doesn't look like a valid price")
+                                
+                            # Add DOM context for debugging
+                            try:
+                                parent_html = await page.evaluate("(el) => el.parentElement.outerHTML", price_element)
+                                logger.debug(f"Price element parent HTML: {parent_html[:200]}...")
+                            except Exception as e:
+                                logger.debug(f"Could not get parent HTML: {e}")
+                                
+                            break
                         else:
-                            price = price_text.replace("$", "").replace(",", "")
-                        break
+                            logger.debug(f"Empty text content from price selector: {selector}")
+                except Exception as e:
+                    logger.debug(f"Error with price selector {selector}: {e}")
+                    continue
+                    
+            if not price:
+                logger.warning(f"❌ Failed to extract price for product: {title}")
+            else:
+                logger.info(f"✅ Successfully extracted final price: '{price}'")
             
             # 3. Description (Overview)
             description = ""
@@ -353,24 +439,74 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                         except Exception:
                             continue
             
+            # # 5. Rating
+            # rating = "Not rated"
+            # rating_selectors = [
+            #     "span[data-automation='reviewsStarRating']",
+            #     ".rating_2WbU5"
+            # ]
+            # for selector in rating_selectors:
+            #     rating_element = await page.query_selector(selector)
+            #     if rating_element:
+            #         rating_text = await rating_element.inner_text()
+            #         if rating_text:
+            #             import re
+            #             rating_match = re.search(r'([\\d\\.]+)', rating_text)
+            #             if rating_match:
+            #                 rating = rating_match.group(1)
+            #             else:
+            #                 rating = rating_text
+            #             break
+
             # 5. Rating
             rating = "Not rated"
+            logger.info(f"Starting rating extraction for product: {title}")
             rating_selectors = [
                 "span[data-automation='reviewsStarRating']",
-                ".rating_2WbU5"
+                ".rating_2WbU5",
+                ".customerRating_28JCg span",
+                "div[class*='rating'] span"
             ]
+            
+            # Log all selectors we're trying
+            logger.debug(f"Rating selectors to try: {', '.join(rating_selectors)}")
+            
             for selector in rating_selectors:
-                rating_element = await page.query_selector(selector)
-                if rating_element:
-                    rating_text = await rating_element.inner_text()
-                    if rating_text:
-                        import re
-                        rating_match = re.search(r'([\\d\\.]+)', rating_text)
-                        if rating_match:
-                            rating = rating_match.group(1)
+                try:
+                    logger.debug(f"Trying rating selector: {selector}")
+                    rating_element = await page.query_selector(selector)
+                    if rating_element:
+                        rating_text = await rating_element.inner_text()
+                        logger.debug(f"Found element with selector {selector}, text content: '{rating_text}'")
+                        
+                        if rating_text:
+                            # Try to extract numeric rating
+                            import re
+                            rating_match = re.search(r'([\\d\\.]+)', rating_text)
+                            if rating_match:
+                                rating = rating_match.group(1)
+                                logger.info(f"Extracted numeric rating: '{rating}' from text: '{rating_text}'")
+                            else:
+                                rating = rating_text
+                                logger.info(f"Using full rating text: '{rating}'")
+                            
+                            # Validate the rating format
+                            if rating.replace('.', '', 1).isdigit():
+                                logger.info(f"✓ Rating validation passed: '{rating}' is numeric")
+                            else:
+                                logger.warning(f"⚠️ Rating validation warning: '{rating}' doesn't look like a valid rating")
+                            
+                            break
                         else:
-                            rating = rating_text
-                        break
+                            logger.debug(f"Empty text content from rating selector: {selector}")
+                except Exception as e:
+                    logger.debug(f"Error with rating selector {selector}: {e}")
+                    continue
+            
+            if rating == "Not rated":
+                logger.info(f"No rating found for product: {title}")
+            else:
+                logger.info(f"✅ Successfully extracted final rating: '{rating}'")
             
             # 6. Image URL
             image_url = ""
@@ -400,9 +536,27 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                 import hashlib
                 product_id = hashlib.md5(url.encode()).hexdigest()[:10]
             
-            # Create product data dictionary
+            # Find category slug from URL based on current config structure
+            category_slug = "unknown"
+            
+            # Try to match the URL with category URLs in the config
+            # The categories are now in a list instead of a dictionary
+            for category in SCRAPER_CONFIG["BESTBUY"]["categories"]:
+                category_url = category["url"]
+                # Check if the category URL is part of the product URL or vice versa
+                # Also extract the domain part for matching (e.g., bestbuy.ca/en-ca/category)
+                domain_part = "/".join(category_url.split("/")[:5])  # Get domain and category part
+                if domain_part in url or category["slug"] in url.lower():
+                    category_slug = category["slug"]
+                    logger.info(f"Detected category: {category_slug}")
+                    break
+                    
+            # Get source from function parameter via closure
+            source = getattr(scrape_product_details, 'source', "Best Buy Canada")
+            
+            # Create product data dictionary using values from SCRAPER_CONFIG
             product_data = {
-                "id": f"bb-{product_id}",
+                "id": f"{SCRAPER_CONFIG['BESTBUY']['base_url'].split('://')[1].split('.')[0]}-{product_id}",
                 "title": title,
                 "price": price,
                 "description": description,
@@ -410,8 +564,8 @@ async def scrape_product_details(page, url: str) -> Optional[Dict]:
                 "url": url,
                 "rating": rating,
                 "image_url": image_url,
-                "source": "Best Buy",
-                "category": "Smartwatches",
+                "source": source,
+                "category": category_slug,
                 "scraped_at": datetime.now().isoformat(),
             }
             
@@ -448,17 +602,18 @@ async def main():
     """
     Main function to run the scraper.
     """
-    parser = argparse.ArgumentParser(description="Scrape smartwatches from Best Buy Canada")
+    parser = argparse.ArgumentParser(description="Scrape products from Best Buy Canada")
     parser.add_argument("--count", type=int, default=10, help="Number of products to scrape")
     parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
     parser.add_argument("--visible", action="store_false", dest="headless", help="Run browser in visible mode")
+    parser.add_argument("--source", type=str, default="Best Buy Canada", help="Source name to include in product data")
     
     args = parser.parse_args()
     
-    products = await scrape_smartwatches(count=args.count, headless=args.headless)
+    products = await scrape_products(count=args.count, headless=args.headless, source=args.source)
     
     if products:
-        print(f"\nSuccessfully scraped {len(products)} smartwatches from Best Buy Canada.")
+        print(f"\nSuccessfully scraped {len(products)} products from Best Buy Canada.")
         print(f"Data saved to {DATA_PATHS['scraped_data']}")
     else:
         print("No products were scraped. Check the logs for details.")

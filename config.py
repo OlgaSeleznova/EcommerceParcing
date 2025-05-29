@@ -18,31 +18,31 @@ LOGS_DIR.mkdir(exist_ok=True)
 
 # Scraper Configuration
 SCRAPER_CONFIG = {
-    # Best Buy configuration
     "BESTBUY": {
         "base_url": "https://bestbuy.ca",
-        "search_url": "https://bestbuy.ca/en-ca/search?searchTerm={query}",
-        "categories": {
-            "smartwatches": {
-                "name": "Smartwatches",
-                "url": "https://www.bestbuy.ca/en-ca/category/smartwatches/35439"
+        "search_url": "https://www.bestbuy.ca/en-ca/search?searchTerm={query}",
+        "categories": [
+            {
+                "slug": "laptop",
+                "name": "Laptops & MacBooks",
+                "url": "https://www.bestbuy.ca/en-ca/category/laptops-macbooks/20352"
             },
-            "smart_glasses": {
-                "name": "Smart Glasses",
-                "url": "https://www.bestbuy.ca/en-ca/category/smart-glasses/14936658?icmp=wt_categorydetail_wt_shopby_cat_smartglasses"
-            }
-        },
+            {
+                "slug": "tv",
+                "name": "Televisions",
+                "url": "https://www.bestbuy.ca/en-ca/category/televisions/20009"
+            },
+        ],
         "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36",
         "headers": {
             "Accept": "text/html,application/xhtml+xml,application/xml",
             "Accept-Language": "en-US,en;q=0.9",
-        },
-        # Delay between requests to avoid rate limiting (in seconds)
+            },
         "request_delay": 2,
-        # Maximum number of retries for a failed request
         "max_retries": 3,
-    }
+    },
 }
+
 
 # LLM Configuration
 LLM_CONFIG = {

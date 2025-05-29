@@ -1,16 +1,6 @@
 1. Web Scraping
 Target Site: Best Buy
-Product Categories: 
-    1.Computers & Tablets
-    2.TV & Home Theater
-    3.Cell Phones
-    4.Appliances
-    5.Audio
-    6.Cameras, Camcorders & Drones
-    7.Video Games
-    8.Smart Home, Security & Wi-Fi
-    9.Wearable Technology
-    10.Health, Wellness & Fitness
+Product Category: Smartwatches
 
 For each product, extract:
 - Product title
