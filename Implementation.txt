@@ -1,0 +1,37 @@
+1. Web Scraping
+Target Site: Best Buy
+Product Categories: 
+    1.Computers & Tablets
+    2.TV & Home Theater
+    3.Cell Phones
+    4.Appliances
+    5.Audio
+    6.Cameras, Camcorders & Drones
+    7.Video Games
+    8.Smart Home, Security & Wi-Fi
+    9.Wearable Technology
+    10.Health, Wellness & Fitness
+
+For each product, extract:
+- Product title
+- Price
+- Description/specifications
+- Product URL
+- Product rating  
+# - Image URL (optional)
+
+TDD tests should check:
+1. At least 10 products are scraped
+2. Each product has a title, price, description, URL, rating
+3. The data is saved to a JSON file
+4. The JSON file is valid JSON
+
+2. LLM Summarization
+For each product, generate:
+- A concise 2–3 sentence summary
+- A tagline or bullet-point highlights
+- A short comparison across a few products
+
+3. Output Results
+API Endpoint: Develop a REST API using Flask with an endpoint like GET /products to serve the data.
+Show the results in a table format.

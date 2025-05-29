@@ -1,0 +1,13 @@
+📌 Project Plan: Product Data Pipeline with LLM Summarization
+1. Project Objectives
+- Develop a Python-based pipeline that:
+- Scrapes product data from a public e-commerce site.
+- Uses an LLM to generate brief summaries or insights for each product.
+- Outputs the results in a structured format (JSON) or serves them via a basic API.
+
+2. Technology Stack
+- Programming Language: Python 3.9+
+- Web Scraping: Playwright
+- LLM Processing: OpenAI API
+- API Framework: Flask
+- Data Storage: JSON files 
