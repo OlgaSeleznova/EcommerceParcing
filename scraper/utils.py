@@ -8,13 +8,12 @@ import asyncio
 import json
 import logging
 import os
-import hashlib
 from datetime import datetime
-from pathlib import Path
+# from pathlib import Path
 from typing import Dict, List, Optional, Any
 
 from playwright.async_api import Page
-from playwright.async_api import expect
+# from playwright.async_api import expect
 
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -419,7 +418,8 @@ async def extract_description(page: Page, logger: logging.Logger) -> str:
 
 async def extract_rating(page: Page, logger: logging.Logger, title: str) -> str:
     """
-    Extract product rating from the product page.
+    Extract product rating from the product page using Playwright locators.
+    Attempts to find and click a reviews button to access detailed rating information.
     
     Args:
         page: Playwright page object
@@ -431,82 +431,88 @@ async def extract_rating(page: Page, logger: logging.Logger, title: str) -> str:
     """
     rating = "Not rated"
     logger.info(f"Starting rating extraction for product: {title}")
-    rating_selectors = [
-        "span[data-automation='reviewsStarRating']",
-        ".rating_2WbU5",
-        ".customerRating_28JCg span",
-        "div[class*='rating'] span"
-    ]
     
-    # Log all selectors we're trying
-    logger.debug(f"Rating selectors to try: {', '.join(rating_selectors)}")
+    # Try Approach 1: Click the reviews button to reveal rating information
+    clicked = False
+    try:
+        # Find the Customer Reviews button
+        review_button = page.locator("button, a").filter(has_text="Customer Reviews").first
+        is_visible = await review_button.is_visible()
+        
+        if is_visible:
+            logger.info("Found visible Customer Reviews button")
+            
+            # Save current URL to check if we navigate away
+            current_url = page.url
+            
+            # Click the button
+            await review_button.click()
+            clicked = True
+            logger.info("Clicked Customer Reviews button")
+            
+            # Wait for any content to load
+            await page.wait_for_timeout(500)
+            
+            # If URL changed, we might have navigated to a reviews page
+            if page.url != current_url:
+                logger.info(f"Navigated to reviews page: {page.url}")
+    except Exception as e:
+        logger.info(f"No reviews button found or could not click: {e}")
+        clicked = False
     
-    for selector in rating_selectors:
+    # After clicking, look for rating information in any newly displayed content
+    if clicked:
         try:
-            logger.debug(f"Trying rating selector: {selector}")
-            rating_element = await page.query_selector(selector)
-            if rating_element:
-                rating_text = await rating_element.inner_text()
-                logger.debug(f"Found element with selector {selector}, text content: '{rating_text}'")
-                
-                if rating_text:
-                    # Try to extract numeric rating
-                    import re
-                    rating_match = re.search(r'([\\d\\.]+)', rating_text)
-                    if rating_match:
-                        rating = rating_match.group(1)
-                        logger.info(f"Extracted numeric rating: '{rating}' from text: '{rating_text}'")
-                    else:
-                        rating = rating_text
-                        logger.info(f"Using full rating text: '{rating}'")
-                    
-                    # Validate the rating format
-                    if rating.replace('.', '', 1).isdigit():
-                        logger.info(f"✓ Rating validation passed: '{rating}' is numeric")
-                    else:
-                        logger.warning(f"⚠️ Rating validation warning: '{rating}' doesn't look like a valid rating")
-                    
-                    break
-                else:
-                    logger.debug(f"Empty text content from rating selector: {selector}")
+            # Wait a moment for any dynamic content to load
+            await page.wait_for_timeout(500)
+            
+            # Look for the rating directly - optimized approach
+            # First try the most common rating element
+            rating_element = page.locator("[class*='rating'], [class*='reviews'] span:first-child").first
+            rating_text = await rating_element.text_content()
+            
+            logger.info(f"Found rating text: '{rating_text}'")
+            
+            # Extract numeric rating
+            import re
+            rating_match = re.search(r'([0-9]+\.?[0-9]*)', rating_text)
+            if rating_match:
+                rating = rating_match.group(1)
+                logger.info(f"✅ Extracted rating: {rating}")
+                return rating
         except Exception as e:
-            logger.debug(f"Error with rating selector {selector}: {e}")
-            continue
+            logger.info(f"Could not extract rating after clicking: {e}")
     
+    # Try Approach 2: Simple fallback - look for rating information directly on the page
+    if rating == "Not rated":
+        try:
+            # Use a direct locator approach instead of looping through selectors
+            rating_locator = page.locator("[class*='rating'], [class*='reviews'] span:first-child, span[data-automation='reviewsStarRating']").first
+            rating_text = await rating_locator.text_content()
+            
+            # Try to extract numeric rating with regex
+            import re
+            rating_match = re.search(r'([0-9]+\.?[0-9]*)', rating_text)
+            if rating_match:
+                rating = rating_match.group(1)
+                logger.info(f"Found direct rating: {rating}")
+            
+                # Validate the rating
+                if rating.replace('.', '', 1).isdigit():
+                    logger.info(f"✓ Rating validation passed: '{rating}' is numeric")
+                else:
+                    logger.warning(f"⚠️ Rating validation warning: '{rating}' doesn't look like a valid rating")
+        except Exception as e:
+            # Silently catch errors
+            logger.debug(f"Fallback rating extraction failed: {e}")
+    
+    # Log final result
     if rating == "Not rated":
         logger.info(f"❌ No rating found for product: {title}")
     else:
         logger.info(f"✅ Successfully extracted final rating: '{rating}'")
-        
+    
     return rating
-
-
-def detect_category(url: str, source: str, logger: logging.Logger) -> str:
-    """
-    Detect product category from URL.
-    
-    Args:
-        url: Product URL
-        source: Source identifier (e.g., "BestBuy")
-        logger: Logger instance
-        
-    Returns:
-        Category slug or "unknown" if not found
-    """
-    category_slug = "unknown"
-    
-    # Try to match the URL with category URLs in the config
-    for category in SCRAPER_CONFIG[source]["categories"]:
-        category_url = category["url"]
-        # Check if the category URL is part of the product URL or vice versa
-        # Also extract the domain part for matching (e.g., bestbuy.ca/en-ca/category)
-        domain_part = "/".join(category_url.split("/")[:5])  # Get domain and category part
-        if domain_part in url or category["slug"] in url.lower():
-            category_slug = category["slug"]
-            logger.info(f"Detected category: {category_slug}")
-            break
-            
-    return category_slug
 
 
 def save_data(products: List[Dict], output_path: str, logger: logging.Logger) -> None:
@@ -541,11 +547,74 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
     parser.add_argument("--visible", action="store_false", dest="headless", help="Run browser in visible mode")
     parser.add_argument("--source", type=str, default="BestBuy", help="Source name to include in product data")
+    parser.add_argument("--category", type=str, default="Laptops", help="Category to scrape (default: Laptops)")
     
     return parser.parse_args()
 
 
-async def scrape_single_product(page: Page, url: str, source: str, logger: logging.Logger) -> Optional[Dict[str, Any]]:
+async def extract_features(page: Page, logger: logging.Logger, title: str) -> List[str]:
+    """
+    Extract product features from the "About this product" section.
+    
+    Args:
+        page: Playwright page object
+        logger: Logger instance
+        title: Product title for logging context
+        
+    Returns:
+        List of product features or empty list if none found
+    """
+    features_list = []
+    logger.info(f"Starting features extraction for: {title}")
+    
+    try:
+        # Find the "About this product" section which may already be visible
+        about_section = page.locator("[class*='about-product'], [class*='about-this-product'], [class*='overview']").first
+        
+        # If not immediately visible, try to find and click the button
+        if not await about_section.is_visible():
+            logger.info("About section not immediately visible, looking for button")
+            about_button = page.locator("button, a").filter(has_text="About this product").first
+            
+            if await about_button.is_visible():
+                logger.info("Found 'About this product' button")
+                try:
+                    await about_button.click()
+                    logger.info("Clicked 'About this product' button")
+                    await page.wait_for_timeout(1000)  # Wait for content to load
+                except Exception as click_err:
+                    logger.info(f"Could not click button: {click_err}")
+        
+        # Now try to extract the content
+        # First look for bullet points which are common in the About section
+        bullet_points = page.locator("[class*='overview'] li, [class*='about'] li, [class*='features'] li")
+        bullet_count = await bullet_points.count()
+        
+        if bullet_count > 0:
+            logger.info(f"Found {bullet_count} bullet points in About section")
+            features = []
+            
+            for i in range(bullet_count):
+                point = await bullet_points.nth(i).text_content()
+                if point and point.strip():
+                    features.append(point.strip())
+            
+            if features:
+                features_list = features  # Directly assign the features list
+                logger.info(f"Extracted {len(features_list)} features")
+                
+    except Exception as e:
+        logger.info(f"Error extracting product features: {e}")
+    
+    if not features_list:
+        logger.info(f"No features found for: {title}")
+    else:
+        logger.info(f"✅ Successfully extracted {len(features_list)} features")
+    
+    return features_list
+
+
+async def scrape_single_product(page: Page, url: str, source: str, logger: logging.Logger, category: str) -> Optional[Dict[str, Any]]:
     """
     Scrape details for a single product.
     
@@ -554,6 +623,7 @@ async def scrape_single_product(page: Page, url: str, source: str, logger: loggi
         url: Product URL
         source: Source identifier (e.g., "BestBuy")
         logger: Logger instance
+        category: Category to include in product data
         
     Returns:
         Product data dictionary or None if scraping failed
@@ -574,20 +644,20 @@ async def scrape_single_product(page: Page, url: str, source: str, logger: loggi
         price = await extract_price(page, logger, title)
         description = await extract_description(page, logger)
         rating = await extract_rating(page, logger, title)
+        features = await extract_features(page, logger, title)
         product_id = await extract_product_id(url, logger)
-        category_slug = detect_category(url, source, logger)
         
         # Create product data dictionary
         product_data = {
             "id": f"{SCRAPER_CONFIG[source]['base_url'].split('://')[1].split('.')[0]}-{product_id}",
+            "category": category,
             "title": title,
             "price": price,
             "description": description,
-            "specifications": {},
+            "features": features,
             "url": url,
             "rating": rating,
             "source": source,
-            "category": category_slug,
             "scraped_at": datetime.now().isoformat(),
         }
         

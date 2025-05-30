@@ -1,26 +1,33 @@
 [
   {
-    "id": "bestbuy-19263405",
-    "title": "Microsoft Surface Pro (LCD) Copilot+ PC 12\" 512GB Tablet with Snapdragon X Plus/16GB RAM (2025) - Violet - Device Only",
-    "price": "$1349.99",
-    "description": "Stay productive and creative, on the go, with this ultra-thin Microsoft Surface Pro 12\" tablet. Light and flexible, you can use it as a tablet or turn it into a laptop for comfortable typing1. Featuring an immersive PixelSense Flow LCD touchscreen and Qualcomm Snapdragon X Plus processor, this machine helps you do more in less time. Plus, possibilities are endless with advanced AI capabilities.",
-    "specifications": {},
-    "url": "https://bestbuy.ca/en-ca/product/microsoft-surface-pro-lcd-copilot-pc-12-512gb-tablet-with-snapdragon-x-plus-16gb-ram-2025-violet-device-only/19263405",
-    "rating": "Not rated",
+    "id": "bestbuy-17937123",
+    "category": "Laptops",
+    "title": "ASUS Vivobook 16\" Laptop - Indie Black (Intel Core i7-1355U/16GB RAM/1TB SSD/Windows 11) - English",
+    "price": "$1099.99",
+    "description": "Experience computing like never before with the ASUS Vivobook 16 laptop. Featuring a powerful Intel Core i7-1355U processor and 16GB of RAM, this laptop ensures lightning-fast performance. The massive 1TB SSD provides ample storage for your files. Its 16\" WUXGA IPS display delivers breathtaking visuals with vibrant colours and sharp details, making it perfect for work and play.",
+    "features": [
+      "45W AC Adapter",
+      "User Manual",
+      "Warranty Card",
+      "13th generation Intel Core i7-1355U CPU and 16GB DDR4 RAM enable smooth and efficient handling of even the most demanding applications",
+      "1TB SSD offers incredibly fast load times and ample storage space, allowing you to quickly access and store all your files",
+      "16-inch WUXGA (1920 x 1200) IPS display provides stunningly clear and vibrant visuals, perfect for both work and entertainment",
+      "NanoEdge ultra-thin bezels and 16:10 aspect ratio immerse you in visuals with an impressive 86% screen-to-body ratio",
+      "Wi-Fi 6E (802.11ax) and Bluetooth 5.3 wireless card offer faster, more reliable internet and seamless device connectivity",
+      "Sleek and lightweight design with just 1.88kg (4.14lb.) weight and 1.99cm (0.78in.) thickness makes it effortlessly portable and stylish",
+      "One USB 3.2 Gen 1 Type-C (support power delivery), two USB 3.2 Gen 1 Type-A, one USB 2.0 Type-A, one HDMI 1.4, and one 3.5mm combo audio jack allow easy connectivity with all your existing peripherals, displays, and projectors",
+      "180-degree hinge allows you to lay the laptop flat, offering versatile viewing angles and easy collaboration with others",
+      "Fingerprint sensor and 720p HD camera with a convenient privacy shutter, make sure your data and personal space remain protected at all times",
+      "ASUS AI noise cancellation isolates unwanted noise from human speech for enhanced communication and improved conferencing experience",
+      "TUV Rheinland certification ensures low-blue light for eye care during extended use",
+      "ASUS ErgoSense Chiclet keyboard with Num-key, optimal click ratio, and a larger multi-finger touchpad boost your work efficiency",
+      "ASUS Antimicrobial Guard strategically applied to high-touch areas, provide an extra layer of protection for enhanced hygiene and cleanliness",
+      "Meets MIL-STD 810H military standards to guarantee unmatched reliability in harsh conditions",
+      "Preloaded Windows 11 Home offers a seamless and intuitive user experience with its advanced features and enhancements"
+    ],
+    "url": "https://bestbuy.ca/en-ca/product/asus-vivobook-16-laptop-indie-black-intel-core-i7-1355u-16gb-ram-1tb-ssd-windows-11-english/17937123",
+    "rating": "4.2",
     "source": "BestBuy",
-    "category": "unknown",
-    "scraped_at": "2025-05-29T23:35:01.464484"
-  },
-  {
-    "id": "bestbuy-18885840",
-    "title": "Lenovo IdeaPad 1i 14\" Laptop - Abyss Blue (Intel Celeron N4500/4GB RAM/128GB SSD/Windows 11)",
-    "price": "$199.99",
-    "description": "Experience excellent performance with the Lenovo IdeaPad 1i laptop. Powered by the Intel Celeron N4500 processor and 4GB of RAM, this laptop lets you multitask efficiently. The 14-inch HD display offers clear, sharp visuals, while Dolby Audio speakers deliver rich, immersive sound.",
-    "specifications": {},
-    "url": "https://bestbuy.ca/en-ca/product/lenovo-ideapad-1i-14-laptop-abyss-blue-intel-celeron-n4500-4gb-ram-128gb-ssd-windows-11/18885840",
-    "rating": "Not rated",
-    "source": "BestBuy",
-    "category": "laptop",
-    "scraped_at": "2025-05-29T23:35:09.404059"
+    "scraped_at": "2025-05-30T12:09:51.168854"
   }
 ]

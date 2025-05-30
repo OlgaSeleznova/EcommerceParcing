@@ -23,12 +23,12 @@ SCRAPER_CONFIG = {
         "search_url": "https://www.bestbuy.ca/en-ca/search?searchTerm={query}",
         "categories": [
             {
-                "slug": "laptop",
+                "slug": "Laptops",
                 "name": "Laptops & MacBooks",
                 "url": "https://www.bestbuy.ca/en-ca/category/laptops-macbooks/20352"
             },
             {
-                "slug": "tv",
+                "slug": "TV",
                 "name": "Televisions",
                 "url": "https://www.bestbuy.ca/en-ca/category/televisions/20009"
             },

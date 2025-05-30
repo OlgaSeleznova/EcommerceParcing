@@ -33,11 +33,24 @@ async def main():
     
     products = []
     
-    # Get the category URL
-    category_url = SCRAPER_CONFIG[args.source]["categories"][0]["url"]
+    # Get the category URL by looking up the category slug
+    category_url = None
+    for category in SCRAPER_CONFIG[args.source]["categories"]:
+        if category["slug"] == args.category:
+            category_url = category["url"]
+            logger.info(f"Using category: {args.category} with URL: {category_url}")
+            break
+    
+    # If the category is not found in the config, raise an error
+    if category_url is None:
+        available_categories = ", ".join([cat["slug"] for cat in SCRAPER_CONFIG[args.source]["categories"]])
+        error_msg = f"Error: Category '{args.category}' not found in config. Available categories: {available_categories}"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
     
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=args.headless)
+        # Launch with more robust settings
+        browser = await p.chromium.launch(headless=args.headless, timeout=60000)
         context = await browser.new_context(
             user_agent=SCRAPER_CONFIG[args.source]["user_agent"],
             viewport={"width": 1920, "height": 1080},
@@ -46,8 +59,12 @@ async def main():
         # Set custom headers
         await context.set_extra_http_headers(SCRAPER_CONFIG[args.source]["headers"])
         
-        # Create a new page
+        # Add a small delay to ensure proper initialization
+        await asyncio.sleep(1)
+        
+        # Create a new page with longer default timeout
         page = await context.new_page()
+        page.set_default_timeout(30000)
         
         try:
             # Navigate to the category page
@@ -94,7 +111,7 @@ async def main():
                 # Try multiple times in case of errors
                 for attempt in range(3):
                     try:
-                        product_data = await scrape_single_product(page, url, args.source, logger)
+                        product_data = await scrape_single_product(page, url, args.source, logger, args.category)
                         if product_data:
                             products.append(product_data)
                             break
