@@ -46,20 +46,15 @@ SCRAPER_CONFIG = {
 
 # LLM Configuration
 LLM_CONFIG = {
-    # OpenAI API configuration
-    "OPENAI": {
+    # OpenAI configuration
+    "OpenAI": {
         "api_key": os.getenv("OPENAI_API_KEY"),
-        "model": "gpt-3.5-turbo",  # or "gpt-4" for better but more expensive results
+        "model": "gpt-3.5-turbo",
         "temperature": 0.7,
         "max_tokens": 150,
         "top_p": 1.0,
         "frequency_penalty": 0.0,
         "presence_penalty": 0.0,
-    },
-    # Hugging Face configuration (optional)
-    "HUGGINGFACE": {
-        "api_key": os.getenv("HUGGINGFACE_API_KEY"),
-        "model": "google/flan-t5-large",
     },
     # Prompt templates
     "PROMPTS": {
@@ -72,9 +67,9 @@ LLM_CONFIG = {
 # API Configuration
 API_CONFIG = {
     "host": "0.0.0.0",
-    "port": 8000,
+    "port": 8888,  
     "debug": True,
-    "cors_origins": ["*"],  # For production, specify exact origins
+    "cors_origins": ["*"], 
     "cors_methods": ["GET"],
 }
 

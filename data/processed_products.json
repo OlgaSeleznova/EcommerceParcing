@@ -26,7 +26,16 @@
     "url": "https://bestbuy.ca/en-ca/product/asus-vivobook-16-16-laptop-indie-black-intel-core-i5-13420h-16gb-ram-512gb-ssd-windows-11/19156189",
     "rating": "3.8",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:12:29.939096"
+    "scraped_at": "2025-05-30T12:12:29.939096",
+    "summary": "Experience seamless computing with the ASUS Vivobook 16 laptop, featuring an Intel Core i5-13420H processor and 16GB DDR4 RAM for fast multitasking. Enjoy immersive visuals on the 16-inch WUXGA display with NanoEdge bezels, while the MIL-STD 810H certification ensures exceptional reliability. Stay connected with Wi-Fi 6E and Bluetooth 5.3, and enhance work efficiency with features like ASUS AI noise cancellation and ErgoSense chiclet keyboard.",
+    "tagline": "Effortless Performance, Immersive Experience.",
+    "highlights": [
+      "Intel Core i5 processor and 16GB RAM for fast, responsive multitasking",
+      "512GB SSD for quick data access and ample storage",
+      "16-inch WUXGA display with NanoEdge bezels for immersive visuals",
+      "TUV Rheinland certified for low blue light, ensuring eye protection",
+      "ASUS AI noise cancellation and fingerprint sensor for enhanced security and communication"
+    ]
   },
   {
     "id": "bestbuy-17937123",
@@ -57,21 +66,39 @@
     "url": "https://bestbuy.ca/en-ca/product/asus-vivobook-16-laptop-indie-black-intel-core-i7-1355u-16gb-ram-1tb-ssd-windows-11-english/17937123",
     "rating": "4.2",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:13:04.328634"
+    "scraped_at": "2025-05-30T12:13:04.328634",
+    "summary": "Experience unparalleled computing performance with the ASUS Vivobook 16 laptop. Powered by a 13th generation Intel Core i7-1355U CPU and 16GB DDR4 RAM, this laptop effortlessly handles demanding tasks. Enjoy stunning visuals on the 16\" WUXGA IPS display, while the 1TB SSD provides lightning-fast load times and ample storage.",
+    "tagline": "Unleash Power and Portability with ASUS Vivobook 16",
+    "highlights": [
+      "Intel Core i7-1355U CPU & 16GB RAM for seamless performance",
+      "1TB SSD for lightning-fast load times and ample storage",
+      "16\" WUXGA IPS display for stunning visuals",
+      "Wi-Fi 6E & Bluetooth 5.3 for fast, reliable connectivity",
+      "Sleek, lightweight design with advanced security features"
+    ]
   },
   {
     "id": "bestbuy-18657889",
     "category": "Laptops",
     "title": "ASUS ZenBook 14 OLED Laptop (14\" FHD+ Touchscreen, Intel 14-Core Ultra 5 125H) 8GB DDR5 RAM, 512GB SSD, AI PC, 15-Hr Long Battery Life, FHD Webcam, Windows 11 Home W/ AI Copilot",
     "price": "$899.99",
-    "description": "We offer a 1-year warranty on your product.Our remarkably sleek Zenbook 14 OLED is there with you — the ultimate ultraportable laptop that takes sophistication to a whole new level. Discover new heights for speed and efficiency with the top-tier Intel Core Ultra 5 processor—taking you seamlessly from day to night on its all-day 75Wh battery. Immerse your senses on a gorgeous 14\" ASUS Lumina OLED touchscreen and powerful new Super-linear speakers tuned by Harman Kardon.",
+    "description": "We offer a 1-year warranty on your product.Our remarkably sleek Zenbook 14 OLED is there with you \u2014 the ultimate ultraportable laptop that takes sophistication to a whole new level. Discover new heights for speed and efficiency with the top-tier Intel Core Ultra 5 processor\u2014taking you seamlessly from day to night on its all-day 75Wh battery. Immerse your senses on a gorgeous 14\" ASUS Lumina OLED touchscreen and powerful new Super-linear speakers tuned by Harman Kardon.",
     "features": [
       "ASUS ZenBook 14 OLED Laptop65W AC Adapter with Power CordUser Manual"
     ],
     "url": "https://bestbuy.ca/en-ca/product/asus-zenbook-14-oled-laptop-14-fhd-touchscreen-intel-14-core-ultra-5-125h-8gb-ddr5-ram-512gb-ssd-ai-pc-15-hr-long-battery-life-fhd-webcam-windows-11-home-w-ai-copilot/18657889",
     "rating": "4.7",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:13:38.057813"
+    "scraped_at": "2025-05-30T12:13:38.057813",
+    "summary": "Experience unparalleled sophistication and speed with our ASUS ZenBook 14 OLED Laptop, equipped with a top-tier Intel Core Ultra 5 processor and a stunning 14\" ASUS Lumina OLED touchscreen. Enjoy all-day productivity with its 75Wh battery and immerse yourself in crystal-clear sound from the new Super-linear speakers tuned by Harman Kardon. Plus, enjoy peace of mind with our 1-year warranty included.",
+    "tagline": "Elevate Your Efficiency with Zenbook 14 OLED",
+    "highlights": [
+      "1-year warranty for peace of mind",
+      "Intel Core Ultra 5 processor for top-tier performance",
+      "All-day 75Wh battery for extended use",
+      "Stunning 14\" ASUS Lumina OLED touchscreen",
+      "Super-linear speakers tuned by Harman Kardon for immersive audio"
+    ]
   },
   {
     "id": "bestbuy-19263405",
@@ -88,7 +115,7 @@
       "Powered by the Qualcomm Snapdragon X Plus (eight core) processor, delivering powerful performance and AI accelerated power",
       "Features turbocharged Qualcomm Hexagon NPU that delivers up to 45 TOPs designed to accelerate AI experiences",
       "12-inch tablet with PixelSense Flow LCD touchscreen display offers stunning, vibrant visuals and image quality",
-      "Stay in the flow—whether you're streaming shows, YouTube, movies, or even video calls, enjoy up to 16 hours of battery (battery life varies significantly based on usage, network and feature configuration, signal strength, settings and other factors)",
+      "Stay in the flow\u2014whether you're streaming shows, YouTube, movies, or even video calls, enjoy up to 16 hours of battery (battery life varies significantly based on usage, network and feature configuration, signal strength, settings and other factors)",
       "Charge on-the-go, transfer data fast, or create the ultimate desktop set up with two USB-C 3.2 ports (USB4 and USB-C are registered trademarks of USB Implementers Forum)",
       "Store and charge Surface Slim Pen1 directly in the new pen storage area on the back of Surface Pro",
       "Designed to be a laptop or a tablet, the built-in 165-degree fluid kickstand offers flexibility at any angle",
@@ -99,7 +126,16 @@
     "url": "https://bestbuy.ca/en-ca/product/microsoft-surface-pro-lcd-copilot-pc-12-512gb-tablet-with-snapdragon-x-plus-16gb-ram-2025-violet-device-only/19263405",
     "rating": "0",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:14:13.251842"
+    "scraped_at": "2025-05-30T12:14:13.251842",
+    "summary": "Introducing the ultra-thin Microsoft Surface Pro 12\" tablet, powered by the Qualcomm Snapdragon X Plus processor for powerful performance and AI acceleration. Enjoy up to 16 hours of battery life and stunning visuals on the PixelSense Flow LCD touchscreen display. With features like USB-C ports, pen storage, and Windows Hello facial recognition, this versatile device seamlessly transitions from tablet to laptop for maximum productivity on the go.",
+    "tagline": "Unleash limitless creativity with Surface Pro's AI-powered versatility.",
+    "highlights": [
+      "Transform between tablet and laptop for seamless productivity",
+      "Stunning 12\" PixelSense Flow LCD touchscreen display",
+      "Qualcomm Snapdragon X Plus processor for powerful performance",
+      "Up to 16 hours of battery life for uninterrupted work and entertainment",
+      "Pair with Surface Pro accessories for a complete user experience"
+    ]
   },
   {
     "id": "bestbuy-19263403",
@@ -116,7 +152,7 @@
       "Powered by the Qualcomm Snapdragon X Plus (eight core) processor, delivering powerful performance and AI accelerated power",
       "Features turbocharged Qualcomm Hexagon NPU that delivers up to 45 TOPs designed to accelerate AI experiences",
       "12-inch tablet with PixelSense Flow LCD touchscreen display offers stunning, vibrant visuals and image quality",
-      "Stay in the flow—whether you're streaming shows, YouTube, movies, or even video calls, enjoy up to 16 hours of battery (battery life varies significantly based on usage, network and feature configuration, signal strength, settings and other factors)",
+      "Stay in the flow\u2014whether you're streaming shows, YouTube, movies, or even video calls, enjoy up to 16 hours of battery (battery life varies significantly based on usage, network and feature configuration, signal strength, settings and other factors)",
       "Charge on-the-go, transfer data fast, or create the ultimate desktop set up with two USB-C 3.2 ports (USB4 and USB-C are registered trademarks of USB Implementers Forum)",
       "Store and charge Surface Slim Pen1 directly in the new pen storage area on the back of Surface Pro",
       "Designed to be a laptop or a tablet, the built-in 165-degree fluid kickstand offers flexibility at any angle",
@@ -127,7 +163,16 @@
     "url": "https://bestbuy.ca/en-ca/product/microsoft-surface-pro-lcd-copilot-pc-12-512gb-tablet-with-snapdragon-x-plus-16gb-ram-2025-ocean-device-only/19263403",
     "rating": "0",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:14:47.354928"
+    "scraped_at": "2025-05-30T12:14:47.354928",
+    "summary": "Maximize your productivity with the ultra-thin Microsoft Surface Pro 12\" tablet featuring a Qualcomm Snapdragon X Plus processor for powerful performance and AI acceleration. Enjoy vibrant visuals on the PixelSense Flow LCD touchscreen display and up to 16 hours of battery life for uninterrupted work or entertainment. Upgrade your efficiency with exclusive Copilot+ PC experiences and turn your tablet into a laptop with the Surface Pro 12-inch keyboard for a seamless typing experience.",
+    "tagline": "Unleash Your Productivity Anywhere, Anytime.",
+    "highlights": [
+      "Transform between tablet and laptop for versatile productivity.",
+      "Qualcomm Snapdragon X Plus processor for powerful performance and AI acceleration.",
+      "Stunning 12-inch PixelSense Flow LCD touchscreen display.",
+      "Up to 16 hours of battery life for extended usage.",
+      "USB-C ports for fast charging and data transfer, plus Surface Slim Pen storage."
+    ]
   },
   {
     "id": "bestbuy-19265465",
@@ -154,7 +199,16 @@
     "url": "https://bestbuy.ca/en-ca/product/microsoft-surface-laptop-13-copilot-pc-laptop-violet-snapdragon-x-plus-16gb-ram-512gb-ufs-en/19265465",
     "rating": "0",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:15:22.086964"
+    "scraped_at": "2025-05-30T12:15:22.086964",
+    "summary": "Introducing the 13\" Microsoft Surface laptop - a powerhouse on-the-go with super-long battery life for uninterrupted productivity. Experience the Copilot+ PC with turbocharged NPU, delivering powerful performance and AI accelerated power, along with a stunning PixelSense Flow display for an immersive viewing experience. Get ready to take your projects to the next level with this smart and portable machine.",
+    "tagline": "Unleash limitless productivity on the go.",
+    "highlights": [
+      "Copilot+ PC for optimized performance and time-saving experiences",
+      "Qualcomm Hexagon NPU for smooth operation of AI-powered apps",
+      "SnapdragonX Plus processor for powerful performance and AI acceleration",
+      "PixelSense Flow LED touchscreen display for immersive visuals",
+      "Up to 23 hours of battery life for uninterrupted usage anywhere"
+    ]
   },
   {
     "id": "bestbuy-17698607",
@@ -177,7 +231,16 @@
     "url": "https://bestbuy.ca/en-ca/product/acer-aspire-go-15-6-laptop-silver-intel-n100-128gb-ssd-4gb-ram-windows-11/17698607",
     "rating": "3.1",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:15:56.702896"
+    "scraped_at": "2025-05-30T12:15:56.702896",
+    "summary": "Effortlessly meet your computing needs with the Acer Aspire Go 15.6\" laptop featuring an Intel N100 processor, 4GB RAM, and a 128GB SSD for efficient performance. Enjoy immersive viewing on the 15.6-inch LCD display, stay connected with Wi-Fi 6 and Bluetooth 5.1, and experience seamless connectivity with multiple ports for external devices. This laptop, preinstalled with Windows 11, ensures a user-friendly interface with enhanced security features, making it a reliable choice for your daily tasks.",
+    "tagline": "Effortless Efficiency, Anywhere, Anytime.",
+    "highlights": [
+      "Intel N100 processor and 4GB DDR5 RAM for fast and efficient performance",
+      "128GB solid state drive for reliable and speedy storage",
+      "15.6-inch LCD display with high-quality resolution for immersive viewing",
+      "Integrated Wi-Fi 6 and Bluetooth 5.1 for convenient wireless connectivity",
+      "Windows 11 preinstalled for enhanced security and user-friendly interface"
+    ]
   },
   {
     "id": "bestbuy-18965633",
@@ -199,32 +262,50 @@
     "url": "https://bestbuy.ca/en-ca/product/asus-tuf-gaming-a15-15-6-gaming-laptop-graphite-black-amd-ryzen-5-7535hs-16gb-ram-1tb-ssd-geforce-rtx-3050/18965633",
     "rating": "4.0",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:16:30.999210"
+    "scraped_at": "2025-05-30T12:16:30.999210",
+    "summary": "Dominate every game with the ASUS TUF A15 15.6-inch gaming laptop featuring an AMD Ryzen 5 7535HS processor, 16GB DDR5 RAM, and NVIDIA GeForce RTX 3050 GPU for exceptional speed and silky smooth graphics. With a durable MIL-STD-810H military standard construction, 1TB SSD, and Windows 11 Home OS, this laptop offers lightning-fast performance, ample storage, and enhanced security for an unbeatable gaming experience.",
+    "tagline": "Unleash Victory: Power, Speed, and Durability in Every Game.",
+    "highlights": [
+      "Lightning-fast performance with AMD Ryzen 5 7535HS processor",
+      "Silky smooth graphics with NVIDIA GeForce RTX 3050 GPU",
+      "Military-grade durability against drops, vibrations, and extreme temperatures",
+      "Ample storage and speed with 1TB SSD and 16GB DDR5 RAM",
+      "Seamless connectivity options with Wi-Fi 6 and Bluetooth 5.3"
+    ]
   },
   {
     "id": "bestbuy-19205139",
     "category": "Laptops",
     "title": "Apple MacBook Air 13.6\" w/ Touch ID (2025) - Midnight (Apple M4 / 16GB RAM / 256GB SSD) - English",
     "price": "$1399.99",
-    "description": "The 13-inch MacBook Air with the M4 chip lets you fly through work and play. With Apple Intelligence,1 a brilliant Liquid Retina display, up to 18 hours of battery life,2 and a strikingly thin and light design, it’s built to last and can take on just about anything, anywhere.",
+    "description": "The 13-inch MacBook Air with the M4 chip lets you fly through work and play. With Apple Intelligence,1 a brilliant Liquid Retina display, up to 18 hours of battery life,2 and a strikingly thin and light design, it\u2019s built to last and can take on just about anything, anywhere.",
     "features": [
       "13\" MacBook Air",
-      "30W USB‑C Power Adapter",
-      "USB‑C to MagSafe 3 Cable (2 m)",
-      "Supercharged by M4—the Apple M4 chip brings even more speed and fluidity to everything you do, like working across multiple apps, editing videos or playing graphically demanding games",
-      "Built for Apple Intelligence—Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data—not even Apple1",
-      "Up to 18 hours of battery life—MacBook Air delivers the same amazing performance whether it’s running on battery or plugged in2",
-      "Superlight and less than half an inch thin, MacBook Air fits easily into your bag—and your on-the-go lifestyle",
+      "30W USB\u2011C Power Adapter",
+      "USB\u2011C to MagSafe 3 Cable (2 m)",
+      "Supercharged by M4\u2014the Apple M4 chip brings even more speed and fluidity to everything you do, like working across multiple apps, editing videos or playing graphically demanding games",
+      "Built for Apple Intelligence\u2014Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data\u2014not even Apple1",
+      "Up to 18 hours of battery life\u2014MacBook Air delivers the same amazing performance whether it\u2019s running on battery or plugged in2",
+      "Superlight and less than half an inch thin, MacBook Air fits easily into your bag\u2014and your on-the-go lifestyle",
       "The 13.6-inch Liquid Retina display supports one billion colours.3 Photos and videos pop with rich contrast and sharp detail, and text appears supercrisp",
       "Everything looks and sounds amazing with a 12MP Center Stage camera, three mics and four speakers with Spatial Audio",
       "MacBook Air features two Thunderbolt 4 ports, a MagSafe charging port, a headphone jack, Wi-Fi 6E and Bluetooth 5.3. And it supports up to two external displays",
       "All your favourites run lightning fast in macOS, including Microsoft 365, Adobe Creative Cloud and Google Workspace4",
-      "Mac works like magic with your other Apple devices. View and control what’s on your iPhone from your Mac with iPhone Mirroring5. Copy something on iPhone and paste it on Mac. Send texts with Messages or use your Mac to make and answer FaceTime calls6"
+      "Mac works like magic with your other Apple devices. View and control what\u2019s on your iPhone from your Mac with iPhone Mirroring5. Copy something on iPhone and paste it on Mac. Send texts with Messages or use your Mac to make and answer FaceTime calls6"
     ],
     "url": "https://bestbuy.ca/en-ca/product/apple-macbook-air-13-6-w-touch-id-2025-midnight-apple-m4-16gb-ram-256gb-ssd-english/19205139",
     "rating": "4.9",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:17:04.521680"
+    "scraped_at": "2025-05-30T12:17:04.521680",
+    "summary": "Experience unparalleled speed and efficiency with the 13-inch MacBook Air, powered by the cutting-edge M4 chip. Boasting up to 18 hours of battery life and a stunning Liquid Retina display, this superlight and ultra-thin device is perfect for work and play on the go. With innovative features like Apple Intelligence and seamless integration with other Apple devices, the MacBook Air is a versatile powerhouse for all your productivity needs.",
+    "tagline": "Unleash Limitless Power with MacBook Air M4",
+    "highlights": [
+      "Supercharged by M4 chip for lightning-fast performance",
+      "Built for Apple Intelligence with enhanced privacy protection",
+      "Up to 18 hours of battery life for all-day productivity",
+      "Ultra-thin and lightweight design for portability",
+      "Stunning Liquid Retina display for vivid visuals and crisp text"
+    ]
   },
   {
     "id": "bestbuy-18486669",
@@ -248,6 +329,15 @@
     "url": "https://bestbuy.ca/en-ca/product/acer-aspire-go-15-6-laptop-silver-intel-n100-8gb-ram-512gb-ssd-windows-11/18486669",
     "rating": "4.6",
     "source": "BestBuy",
-    "scraped_at": "2025-05-30T12:17:39.032228"
+    "scraped_at": "2025-05-30T12:17:39.032228",
+    "summary": "Maximize your productivity and entertainment with the Acer Aspire Go 15.6-inch laptop featuring an Intel N100 processor, 8GB RAM, and a speedy 512GB SSD. Enjoy crisp visuals on the FHD display, fast internet connectivity with Wi-Fi 6, and seamless multitasking with Windows Copilot AI assistance. Elevate your computing experience with Windows 11 preloaded and stay connected with versatile connectivity options.",
+    "tagline": "Unleash Productivity with Acer Aspire Go Laptop",
+    "highlights": [
+      "Intel N100 processor and 8GB RAM for smooth multitasking",
+      "512GB SSD for fast data access and ample storage",
+      "15.6-inch FHD display for stunning visual clarity",
+      "Wi-Fi 6 technology for fast and reliable internet connectivity",
+      "Up to 8.5 hours of battery life for extended productivity"
+    ]
   }
 ]

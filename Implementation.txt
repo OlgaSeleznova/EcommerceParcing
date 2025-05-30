@@ -1,6 +1,6 @@
 1. Web Scraping
 Target Site: Best Buy
-Product Category: Smartwatches
+Product Category: Laptops
 
 For each product, extract:
 - Product title
@@ -9,18 +9,18 @@ For each product, extract:
 - Product URL
 - Product rating  
 
-TDD tests should check:
-1. At least 10 products are scraped
-2. Each product has a title, price, description, URL, rating
-3. The data is saved to a JSON file
-4. The JSON file is valid JSON
-
 2. LLM Summarization
 For each product, generate:
 - A concise 2–3 sentence summary
+    Prompt: You are an experienced Marketing specialist. Your task is to maximize sales for the product. Please generate concise 2–3 sentence summary using the following information: Product descrintion {description}, key features {features}. 
 - A tagline or bullet-point highlights
-- A short comparison across a few products
-
+    Prompt: 
+    You are a marketing copywriter. Based on the following product description and key features, generate:
+        1. A catchy, concise tagline (no more than 10 words) that communicates the product’s main benefit.
+        2. Five bullet-point highlights that summarize the most compelling features and advantages in a way that would appeal to customers.
+        Product Description: {description}
+        Key Features: {features}
+    
 3. Output Results
 API Endpoint: Develop a REST API using Flask with an endpoint like GET /products to serve the data.
 Show the results in a table format.
