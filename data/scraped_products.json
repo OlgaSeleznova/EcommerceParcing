@@ -1,24 +1,26 @@
 [
   {
-    "id": "bestbuy-18657889",
-    "title": "ASUS ZenBook 14 OLED Laptop (14\" FHD+ Touchscreen, Intel 14-Core Ultra 5 125H) 8GB DDR5 RAM, 512GB SSD, AI PC, 15-Hr Long Battery Life, FHD Webcam, Windows 11 Home W/ AI Copilot",
-    "price": "",
-    "description": "ASUS ZenBook 14 OLED Laptop (14\" FHD+ Touchscreen, Intel 14-Core Ultra 5 125H) 8GB DDR5 RAM, 512GB SSD, AI PC, 15-Hr Long Battery Life, FHD Webcam, Windows 11 Home W/ AI Copilot Brand: ASUSModel: Zenbook 14Web Code: 18657889 4.7(264 Reviews) Sold and shipped by Tech Nation | 4.2 seller rating (497 reviews)",
-    "url": "https://bestbuy.ca/en-ca/product/asus-zenbook-14-oled-laptop-14-fhd-touchscreen-intel-14-core-ultra-5-125h-8gb-ddr5-ram-512gb-ssd-ai-pc-15-hr-long-battery-life-fhd-webcam-windows-11-home-w-ai-copilot/18657889",
+    "id": "bestbuy-19263405",
+    "title": "Microsoft Surface Pro (LCD) Copilot+ PC 12\" 512GB Tablet with Snapdragon X Plus/16GB RAM (2025) - Violet - Device Only",
+    "price": "$1349.99",
+    "description": "Stay productive and creative, on the go, with this ultra-thin Microsoft Surface Pro 12\" tablet. Light and flexible, you can use it as a tablet or turn it into a laptop for comfortable typing1. Featuring an immersive PixelSense Flow LCD touchscreen and Qualcomm Snapdragon X Plus processor, this machine helps you do more in less time. Plus, possibilities are endless with advanced AI capabilities.",
+    "specifications": {},
+    "url": "https://bestbuy.ca/en-ca/product/microsoft-surface-pro-lcd-copilot-pc-12-512gb-tablet-with-snapdragon-x-plus-16gb-ram-2025-violet-device-only/19263405",
     "rating": "Not rated",
     "source": "BestBuy",
-    "category": "laptop",
-    "scraped_at": "2025-05-29T19:09:23.648768"
+    "category": "unknown",
+    "scraped_at": "2025-05-29T23:35:01.464484"
   },
   {
-    "id": "bestbuy-18477937",
-    "title": "Dell Inspiron 14 Plus 14\" Laptop - Ice Blue (Intel Core Ultra 7-155H/16GB RAM/1TB SSD/Windows 11)",
-    "price": "",
-    "description": "Customer Reviews (1 Review) About This Product What's included: Notebook Power Cord Power Adaptor Manual Intel Core Ultra 7 - 155H processor and 16GB RAM offer enhanced multitasking capabilities and improves overall system performance 1TB solid state drive provides ample storage space for your files 14-inch LCD display with 2240 x 1400 resolution delivers crisp and clear picture Intel Wi-Fi 6E 2 x 2 AX211 Wi-Fi and integrated Bluetooth 5.2 offer reliable options for wireless connectivity One Micro SD card reader, one Intel Thunderbolt 4.0, two USB 3.2 Gen 1 Type-A, one HDMI 1.4, and one universal audio jack provide versatile connectivity options Integrated AI enhances various functions within the laptop AI-enabled video chatting features, like auto framing and AI eye contact, significantly enhance virtual communication Military-grade testing ensures reliability and resilience in various environments, making it suitable for both personal and professional use Integrated Trusted Platfo...",
-    "url": "https://bestbuy.ca/en-ca/product/dell-inspiron-14-plus-14-laptop-ice-blue-intel-core-ultra-7-155h-16gb-ram-1tb-ssd-windows-11/18477937",
+    "id": "bestbuy-18885840",
+    "title": "Lenovo IdeaPad 1i 14\" Laptop - Abyss Blue (Intel Celeron N4500/4GB RAM/128GB SSD/Windows 11)",
+    "price": "$199.99",
+    "description": "Experience excellent performance with the Lenovo IdeaPad 1i laptop. Powered by the Intel Celeron N4500 processor and 4GB of RAM, this laptop lets you multitask efficiently. The 14-inch HD display offers clear, sharp visuals, while Dolby Audio speakers deliver rich, immersive sound.",
+    "specifications": {},
+    "url": "https://bestbuy.ca/en-ca/product/lenovo-ideapad-1i-14-laptop-abyss-blue-intel-celeron-n4500-4gb-ram-128gb-ssd-windows-11/18885840",
     "rating": "Not rated",
     "source": "BestBuy",
     "category": "laptop",
-    "scraped_at": "2025-05-29T19:09:31.888557"
+    "scraped_at": "2025-05-29T23:35:09.404059"
   }
 ]

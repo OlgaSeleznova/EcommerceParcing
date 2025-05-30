@@ -1,0 +1,605 @@
+"""
+Utility functions for the Best Buy scraper.
+
+This module contains reusable functions for scraping Best Buy product data.
+"""
+import argparse
+import asyncio
+import json
+import logging
+import os
+import hashlib
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Any
+
+from playwright.async_api import Page
+from playwright.async_api import expect
+
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import SCRAPER_CONFIG, DATA_PATHS, LOGGING_CONFIG
+
+
+def setup_logger(name: str = __name__) -> logging.Logger:
+    """
+    Set up and configure the logger for the scraper.
+    
+    Args:
+        name: Logger name (default: module name)
+        
+    Returns:
+        Configured logger instance
+    """
+    logger = logging.getLogger(name)
+    logger.setLevel(getattr(logging, LOGGING_CONFIG["level"]))
+    
+    # Create formatter
+    formatter = logging.Formatter(LOGGING_CONFIG["format"])
+    
+    # Create console handler and set level
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(getattr(logging, LOGGING_CONFIG["level"]))
+    console_handler.setFormatter(formatter)
+    
+    # Create file handler and set level
+    log_file = LOGGING_CONFIG.get("file")
+    if log_file:
+        # Create logs directory if it doesn't exist
+        log_dir = os.path.dirname(log_file)
+        os.makedirs(log_dir, exist_ok=True)
+        
+        # Add timestamp to log filename to create unique logs for each run
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_filename = f"scraper_{timestamp}.log"
+        log_path = os.path.join(log_dir, log_filename)
+        
+        file_handler = logging.FileHandler(log_path)
+        file_handler.setLevel(getattr(logging, LOGGING_CONFIG["level"]))
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+        logger.info(f"Logging to file: {log_path}")
+    
+    # Add console handler to logger
+    logger.addHandler(console_handler)
+    
+    # Prevent logs from being propagated to the root logger
+    logger.propagate = False
+    
+    return logger
+
+
+async def extract_product_urls(page: Page, logger: logging.Logger, source: str) -> List[str]:
+    """
+    Extract product URLs from a category page.
+    
+    Args:
+        page: Playwright page object
+        logger: Logger instance
+        source: Source identifier (e.g., "BestBuy")
+        
+    Returns:
+        List of product URLs
+    """
+    logger.info("Extracting product links")
+    product_links = []
+    
+    # Define selectors for product items
+    product_selectors = [
+        ".x-productListItem",
+        "div[class*='productLine']",
+        "div[class*='product-item']",
+        ".product-listing"
+    ]
+    
+    # Try different selectors for product items
+    for selector in product_selectors:
+        product_elements = await page.query_selector_all(selector)
+        if product_elements and len(product_elements) > 0:
+            logger.info(f"Found {len(product_elements)} product elements with selector: {selector}")
+            
+            # Extract links from each product element
+            for element in product_elements:
+                try:
+                    # Try to find the product link
+                    link_selectors = [
+                        "a[href*='/en-ca/product/']",
+                        "a[data-automation='product-item-link']",
+                        "a[class*='link']"
+                    ]
+                    
+                    for link_selector in link_selectors:
+                        link_element = await element.query_selector(link_selector)
+                        if link_element:
+                            href = await link_element.get_attribute("href")
+                            if href and "/en-ca/product/" in href:
+                                # Ensure we have a full URL
+                                if href.startswith("http"):
+                                    product_links.append(href)
+                                else:
+                                    product_links.append(f"{SCRAPER_CONFIG[source]['base_url']}{href}")
+                            break
+                except Exception as e:
+                    logger.warning(f"Error extracting link: {e}")
+            
+            # If we found links, no need to try other selectors
+            if product_links:
+                break
+    
+    # Remove duplicates
+    product_links = list(set(product_links))
+    logger.info(f"Found {len(product_links)} unique product links")
+    
+    return product_links
+
+
+async def extract_product_id(url: str, logger: logging.Logger) -> str:
+    """
+    Extract product ID from URL.
+    
+    Args:
+        url: Product URL
+        logger: Logger instance
+        
+    Returns:
+        Product ID
+    """
+    # Try to extract product ID from URL
+    try:
+        # URLs typically end with a product ID like /product-name/12345678
+        product_id = url.split("/")[-1]
+        
+        # Check if it's a numeric ID
+        if product_id.isdigit():
+            return product_id
+        
+        # If not, try to extract from the URL path
+        parts = url.split("/")
+        for part in reversed(parts):
+            if part.isdigit():
+                return part
+    except Exception:
+        pass
+    
+    # If extraction fails, generate an ID from the URL
+    logger.debug(f"Could not extract numeric ID from URL, generating hash: {url}")
+    import hashlib
+    return hashlib.md5(url.encode()).hexdigest()[:10]
+
+
+async def extract_title(page: Page, logger: logging.Logger) -> Optional[str]:
+    """
+    Extract product title from the product page.
+    
+    Args:
+        page: Playwright page object
+        logger: Logger instance
+        
+    Returns:
+        Product title or None if not found
+    """
+    # Title extraction
+    title = ""
+    title_selectors = [
+        "h1[data-automation='product-title']",
+        "h1.productName_2KoPa",
+        "h1[class*='title']",
+        "h1[itemprop='name']"
+    ]
+    
+    for selector in title_selectors:
+        try:
+            title_element = await page.query_selector(selector)
+            if title_element:
+                title = await title_element.inner_text()
+                if title:
+                    logger.debug(f"Extracted title: {title} using selector: {selector}")
+                    break
+        except Exception as e:
+            logger.debug(f"Error with title selector {selector}: {e}")
+    
+    if not title:
+        logger.warning("Could not find title for product")
+        return None
+        
+    return title
+
+
+async def extract_price(page: Page, logger: logging.Logger, title: str) -> str:
+    """
+    Uses multiple techniques to extract the price from a Best Buy product page.
+    
+    Args:
+        page: Playwright page object
+        product_id: Product ID extracted from URL
+        url: Full URL of the product
+        
+    Returns:
+        str: Extracted price or fallback value
+    """
+    # No fallback to expected prices - we'll only use what we can scrape
+    
+    # Try multiple extraction techniques
+    price = None
+    
+    # 1. Try JSON-LD data
+    try:
+        script_content = await page.evaluate('''
+            Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+                .map(script => script.textContent)
+        ''')
+        
+        for content in script_content:
+            try:
+                data = json.loads(content)
+                if isinstance(data, dict):
+                    # Check for price in offers
+                    if 'offers' in data and isinstance(data['offers'], dict) and 'price' in data['offers']:
+                        price = f"${data['offers']['price']}"
+                        logger.info(f"Found price in JSON-LD offers: {price}")
+                        print(f"Found price in JSON-LD offers: {price}")
+                        break
+                    # Check for price directly in data
+                    elif 'price' in data:
+                        price = f"${data['price']}"
+                        logger.info(f"Found price in JSON-LD root: {price}")
+                        print(f"Found price in JSON-LD root: {price}")
+                        break
+            except Exception:
+                continue
+    except Exception as e:
+        print(f"Error extracting from JSON-LD: {str(e)}")
+    
+    # 2. Try to find price in product schema from HTML
+    if not price:
+        try:
+            html_content = await page.content()
+            schema_matches = re.findall(r'<script type="application/ld\+json">([\s\S]*?)</script>', html_content)
+            
+            for schema in schema_matches:
+                try:
+                    data = json.loads(schema)
+                    if data.get('@type') == 'Product' and 'offers' in data:
+                        offers = data['offers']
+                        if isinstance(offers, dict) and 'price' in offers:
+                            price = f"${offers['price']}"
+                            logger.info(f"Found price in schema data: {price}")
+                            print(f"Found price in schema data: {price}")
+                            break
+                except:
+                    continue
+        except Exception as e:
+            print(f"Error extracting from schema: {str(e)}")
+    
+    # 3. Try to extract price from visible DOM elements
+    if not price:
+        try:
+            # Execute complex DOM traversal in the browser context
+            price_text = await page.evaluate('''
+                () => {
+                    // Try to find price elements
+                    const priceContainers = [
+                        ...document.querySelectorAll('[class*="price-container"]'),
+                        ...document.querySelectorAll('[class*="price"]'),
+                        ...document.querySelectorAll('[data-automation="product-price"]')
+                    ];
+                    
+                    // Filter out warranty prices
+                    for (const container of priceContainers) {
+                        // Skip if container appears to be warranty related
+                        const containerText = container.textContent.toLowerCase();
+                        if (containerText.includes('warranty') || 
+                            containerText.includes('protection plan') ||
+                            containerText.includes('year plan')) {
+                            continue;
+                        }
+                        
+                        // Find a price pattern
+                        const match = container.textContent.match(/\$[\d,]+\.\d{2}/);
+                        if (match) {
+                            return match[0];
+                        }
+                    }
+                    
+                    return null;
+                }
+            ''')
+            
+            if price_text:
+                price = price_text
+                logger.info(f"Found price in DOM: {price}")
+                print(f"Found price in DOM: {price}")
+        except Exception as e:
+            print(f"Error extracting from DOM: {str(e)}")
+    
+    # 4. Last resort: try one more technique with full page text
+    if not price:
+        try:
+            # Get all text from the page and look for price patterns
+            full_text = await page.evaluate('''() => document.body.innerText''')
+            import re
+            # Look for main price patterns (avoiding warranty sections)
+            matches = re.findall(r'\$[\d,]+\.\d{2}', full_text)
+            for match in matches:
+                # Skip if this appears to be in a warranty section
+                idx = full_text.find(match)
+                ctx = full_text[max(0, idx-100):idx+len(match)+100].lower()
+                if not any(w in ctx for w in ['warranty', 'protection', 'plan', 'year plan']):
+                    price = match
+                    logger.info(f"Found price in full text: {price}")
+                    print(f"Found price in full text: {price}")
+                    break
+        except Exception as e:
+            print(f"Error in last resort price extraction: {str(e)}")
+    
+    # Final fallback
+    return price.strip() if price else "Price not found"
+
+
+async def extract_description(page: Page, logger: logging.Logger) -> str:
+    """
+    Extract product description from the product page.
+    
+    Args:
+        page: Playwright page object
+        logger: Logger instance
+        
+    Returns:
+        Product description or empty string if not found
+    """
+    description = ""
+    
+    # First try the product overview tab
+    overview_tab_selectors = [
+        "button[data-automation='overview-tab']", 
+        "button:has-text('Overview')",
+        "#overview"
+    ]
+    
+    for selector in overview_tab_selectors:
+        try:
+            overview_tab = await page.query_selector(selector)
+            if overview_tab:
+                await overview_tab.click()
+                await page.wait_for_timeout(1000)  # Wait for content to load
+                break
+        except Exception:
+            continue
+    
+    # Try different selectors for description content
+    description_selectors = [
+        "div[data-automation='overview-content']",
+        "div[class*='overview']",
+        "div[class*='description']",
+        "div[itemprop='description']"
+    ]
+    
+    for selector in description_selectors:
+        try:
+            description_element = await page.query_selector(selector)
+            if description_element:
+                text = await description_element.inner_text()
+                if text and len(text) > 100:  # Ensure it's substantial enough to be a description
+                    description = text
+                    logger.info(f"Found description with selector: {selector}")
+                    logger.info(f"Description length: {len(description)} characters")
+                    break
+        except Exception:
+            continue
+    
+    # If we couldn't find the description in structured elements, try generic divs
+    if not description:
+        # Get all divs with substantial text
+        try:
+            divs = await page.query_selector_all("div")
+            for div in divs:
+                text = await div.inner_text()
+                if text:
+                    # Look for divs with a decent amount of text that might be a description
+                    if len(text) > 100 and len(text) < 2000:
+                        # Check if it has keywords that suggest it's a product description
+                        text_lower = text.lower()
+                        if any(keyword in text_lower for keyword in ["features", "designed", "watch", "track", "monitor", "battery", "display"]):
+                            description = text
+                            logger.info("Found description in generic div with product-related content")
+                            logger.info(f"Description length: {len(description)} characters")
+                            break
+        except Exception:
+            pass
+    
+    # Truncate very long descriptions
+    if len(description) > 1000:
+        description = description[:1000] + "..."
+    
+    if not description:
+        logger.warning("No product description found")
+        
+    return description
+
+
+async def extract_rating(page: Page, logger: logging.Logger, title: str) -> str:
+    """
+    Extract product rating from the product page.
+    
+    Args:
+        page: Playwright page object
+        logger: Logger instance
+        title: Product title for logging context
+        
+    Returns:
+        Product rating or "Not rated" if not found
+    """
+    rating = "Not rated"
+    logger.info(f"Starting rating extraction for product: {title}")
+    rating_selectors = [
+        "span[data-automation='reviewsStarRating']",
+        ".rating_2WbU5",
+        ".customerRating_28JCg span",
+        "div[class*='rating'] span"
+    ]
+    
+    # Log all selectors we're trying
+    logger.debug(f"Rating selectors to try: {', '.join(rating_selectors)}")
+    
+    for selector in rating_selectors:
+        try:
+            logger.debug(f"Trying rating selector: {selector}")
+            rating_element = await page.query_selector(selector)
+            if rating_element:
+                rating_text = await rating_element.inner_text()
+                logger.debug(f"Found element with selector {selector}, text content: '{rating_text}'")
+                
+                if rating_text:
+                    # Try to extract numeric rating
+                    import re
+                    rating_match = re.search(r'([\\d\\.]+)', rating_text)
+                    if rating_match:
+                        rating = rating_match.group(1)
+                        logger.info(f"Extracted numeric rating: '{rating}' from text: '{rating_text}'")
+                    else:
+                        rating = rating_text
+                        logger.info(f"Using full rating text: '{rating}'")
+                    
+                    # Validate the rating format
+                    if rating.replace('.', '', 1).isdigit():
+                        logger.info(f"✓ Rating validation passed: '{rating}' is numeric")
+                    else:
+                        logger.warning(f"⚠️ Rating validation warning: '{rating}' doesn't look like a valid rating")
+                    
+                    break
+                else:
+                    logger.debug(f"Empty text content from rating selector: {selector}")
+        except Exception as e:
+            logger.debug(f"Error with rating selector {selector}: {e}")
+            continue
+    
+    if rating == "Not rated":
+        logger.info(f"❌ No rating found for product: {title}")
+    else:
+        logger.info(f"✅ Successfully extracted final rating: '{rating}'")
+        
+    return rating
+
+
+def detect_category(url: str, source: str, logger: logging.Logger) -> str:
+    """
+    Detect product category from URL.
+    
+    Args:
+        url: Product URL
+        source: Source identifier (e.g., "BestBuy")
+        logger: Logger instance
+        
+    Returns:
+        Category slug or "unknown" if not found
+    """
+    category_slug = "unknown"
+    
+    # Try to match the URL with category URLs in the config
+    for category in SCRAPER_CONFIG[source]["categories"]:
+        category_url = category["url"]
+        # Check if the category URL is part of the product URL or vice versa
+        # Also extract the domain part for matching (e.g., bestbuy.ca/en-ca/category)
+        domain_part = "/".join(category_url.split("/")[:5])  # Get domain and category part
+        if domain_part in url or category["slug"] in url.lower():
+            category_slug = category["slug"]
+            logger.info(f"Detected category: {category_slug}")
+            break
+            
+    return category_slug
+
+
+def save_data(products: List[Dict], output_path: str, logger: logging.Logger) -> None:
+    """
+    Save product data to a JSON file.
+    
+    Args:
+        products: List of product dictionaries
+        output_path: Path to save the JSON file
+        logger: Logger instance
+    """
+    # Ensure directory exists
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
+    logger.info(f"Saving {len(products)} products to {output_path}")
+    
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(products, f, indent=2, ensure_ascii=False)
+    
+    logger.info(f"Data saved to {output_path}")
+
+
+def parse_args() -> argparse.Namespace:
+    """
+    Parse command-line arguments.
+    
+    Returns:
+        Parsed arguments
+    """
+    parser = argparse.ArgumentParser(description="Scrape products from Best Buy")
+    parser.add_argument("--count", type=int, default=10, help="Number of products to scrape")
+    parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+    parser.add_argument("--visible", action="store_false", dest="headless", help="Run browser in visible mode")
+    parser.add_argument("--source", type=str, default="BestBuy", help="Source name to include in product data")
+    
+    return parser.parse_args()
+
+
+async def scrape_single_product(page: Page, url: str, source: str, logger: logging.Logger) -> Optional[Dict[str, Any]]:
+    """
+    Scrape details for a single product.
+    
+    Args:
+        page: Playwright page object
+        url: Product URL
+        source: Source identifier (e.g., "BestBuy")
+        logger: Logger instance
+        
+    Returns:
+        Product data dictionary or None if scraping failed
+    """
+    logger.info(f"Scraping product: {url}")
+    
+    try:
+        # Navigate to the product page
+        await page.goto(url, timeout=60000)
+        await page.wait_for_timeout(1000)  # Allow time for page to fully load
+        
+        # Extract product details
+        title = await extract_title(page, logger)
+        if not title:
+            logger.warning(f"Could not find title for {url}")
+            return None
+            
+        price = await extract_price(page, logger, title)
+        description = await extract_description(page, logger)
+        rating = await extract_rating(page, logger, title)
+        product_id = await extract_product_id(url, logger)
+        category_slug = detect_category(url, source, logger)
+        
+        # Create product data dictionary
+        product_data = {
+            "id": f"{SCRAPER_CONFIG[source]['base_url'].split('://')[1].split('.')[0]}-{product_id}",
+            "title": title,
+            "price": price,
+            "description": description,
+            "specifications": {},
+            "url": url,
+            "rating": rating,
+            "source": source,
+            "category": category_slug,
+            "scraped_at": datetime.now().isoformat(),
+        }
+        
+        logger.info(f"Successfully scraped product: {title}")
+        return product_data
+        
+    except Exception as e:
+        logger.error(f"Error scraping product {url}: {e}")
+        return None
+
+
+if __name__ == "__main__":
+    # This allows the module to be imported without running the main code
+    # while still providing a way to run it directly
+    pass
