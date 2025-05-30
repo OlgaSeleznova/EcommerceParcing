@@ -1,0 +1,66 @@
+{
+  "timestamp": 1748626386.795478,
+  "products": [
+    {
+      "id": "bestbuy-19205139",
+      "title": "Apple MacBook Air 13.6\" w/ Touch ID (2025) - Midnight (Apple M4 / 16GB RAM / 256GB SSD) - English",
+      "rating": 4.9,
+      "price": "$1399.99",
+      "url": "https://bestbuy.ca/en-ca/product/apple-macbook-air-13-6-w-touch-id-2025-midnight-apple-m4-16gb-ram-256gb-ssd-english/19205139",
+      "summary": "Experience unparalleled speed and efficiency with the 13-inch MacBook Air, powered by the cutting-edge M4 chip. Boasting up to 18 hours of battery life and a stunning Liquid Retina display, this superlight and ultra-thin device is perfect for work and play on the go. With innovative features like Apple Intelligence and seamless integration with other Apple devices, the MacBook Air is a versatile powerhouse for all your productivity needs.",
+      "tagline": "Unleash Limitless Power with MacBook Air M4"
+    },
+    {
+      "id": "bestbuy-18657889",
+      "title": "ASUS ZenBook 14 OLED Laptop (14\" FHD+ Touchscreen, Intel 14-Core Ultra 5 125H) 8GB DDR5 RAM, 512GB SSD, AI PC, 15-Hr Long Battery Life, FHD Webcam, Windows 11 Home W/ AI Copilot",
+      "rating": 4.7,
+      "price": "$899.99",
+      "url": "https://bestbuy.ca/en-ca/product/asus-zenbook-14-oled-laptop-14-fhd-touchscreen-intel-14-core-ultra-5-125h-8gb-ddr5-ram-512gb-ssd-ai-pc-15-hr-long-battery-life-fhd-webcam-windows-11-home-w-ai-copilot/18657889",
+      "summary": "Experience unparalleled sophistication and speed with our ASUS ZenBook 14 OLED Laptop, equipped with a top-tier Intel Core Ultra 5 processor and a stunning 14\" ASUS Lumina OLED touchscreen. Enjoy all-day productivity with its 75Wh battery and immerse yourself in crystal-clear sound from the new Super-linear speakers tuned by Harman Kardon. Plus, enjoy peace of mind with our 1-year warranty included.",
+      "tagline": "Elevate Your Efficiency with Zenbook 14 OLED"
+    },
+    {
+      "id": "bestbuy-18486669",
+      "title": "Acer Aspire Go 15.6\" Laptop - Silver (Intel N100/8GB RAM/512GB SSD/Windows 11)",
+      "rating": 4.6,
+      "price": "$399.99",
+      "url": "https://bestbuy.ca/en-ca/product/acer-aspire-go-15-6-laptop-silver-intel-n100-8gb-ram-512gb-ssd-windows-11/18486669",
+      "summary": "Maximize your productivity and entertainment with the Acer Aspire Go 15.6-inch laptop featuring an Intel N100 processor, 8GB RAM, and a speedy 512GB SSD. Enjoy crisp visuals on the FHD display, fast internet connectivity with Wi-Fi 6, and seamless multitasking with Windows Copilot AI assistance. Elevate your computing experience with Windows 11 preloaded and stay connected with versatile connectivity options.",
+      "tagline": "Unleash Productivity with Acer Aspire Go Laptop"
+    }
+  ],
+  "comparison_criteria": [
+    "Which product offers the best performance for its price?",
+    "Which product has the most user-friendly features?",
+    "Which product provides the best long-term value?",
+    "Which product has the most versatile functionality?",
+    "Which product is most suitable for professional use?"
+  ],
+  "comparison_results": [
+    {
+      "criterion": "Which product offers the best performance for its price?",
+      "winner": "Product 1 is the best for this criterion",
+      "explanation": "Product 1 excels in this area because of its superior specifications and features. It provides exceptional value and performance compared to the alternatives."
+    },
+    {
+      "criterion": "Which product has the most user-friendly features?",
+      "winner": "Product 2 is the best for this criterion",
+      "explanation": "Product 2 excels in this area because of its superior specifications and features. It provides exceptional value and performance compared to the alternatives."
+    },
+    {
+      "criterion": "Which product provides the best long-term value?",
+      "winner": "Product 3 is the best for this criterion",
+      "explanation": "Product 3 excels in this area because of its superior specifications and features. It provides exceptional value and performance compared to the alternatives."
+    },
+    {
+      "criterion": "Which product has the most versatile functionality?",
+      "winner": "Product 1 is the best for this criterion",
+      "explanation": "Product 1 excels in this area because of its superior specifications and features. It provides exceptional value and performance compared to the alternatives."
+    },
+    {
+      "criterion": "Which product is most suitable for professional use?",
+      "winner": "Product 2 is the best for this criterion",
+      "explanation": "Product 2 excels in this area because of its superior specifications and features. It provides exceptional value and performance compared to the alternatives."
+    }
+  ]
+}

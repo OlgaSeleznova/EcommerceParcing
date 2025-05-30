@@ -12,6 +12,7 @@ from flask_cors import CORS
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import API_CONFIG, DATA_PATHS, LOGGING_CONFIG
+from comparison.compare_products import compare_products
 
 # Configure logging
 logging.basicConfig(
@@ -67,7 +68,7 @@ def root():
         "endpoints": [
             {"path": "/products", "method": "GET", "description": "Get all products"},
             {"path": "/products/<product_id>", "method": "GET", "description": "Get a product by ID"},
-            {"path": "/products/category/<category>", "method": "GET", "description": "Get products by category"}
+            {"path": "/products/comparison", "method": "GET", "description": "Get a comparison of the top 3 rated products"}
         ]
     })
 
@@ -130,44 +131,41 @@ def get_product(product_id):
     # If no product is found, return 404
     abort(404, description=f"Product with ID '{product_id}' not found")
 
-@app.route('/products/category/<category>')
-def get_products_by_category(category):
+@app.route('/products/comparison')
+def get_product_comparison():
     """
-    Get products by category.
+    Get a comparison of the top 3 rated products.
     
-    Args:
-        category (str): Category to filter by
-        
     Query Parameters:
-        limit: Maximum number of products to return
-        offset: Number of products to skip
+        use_mock: Whether to use mock data (default: false)
+        refresh: Whether to regenerate the comparison (default: false)
         
     Returns:
-        JSON: Products and metadata
+        JSON: Comparison data including products, criteria, and results
     """
     # Get query parameters
-    limit = request.args.get('limit', default=10, type=int)
-    offset = request.args.get('offset', default=0, type=int)
+    use_mock = request.args.get('use_mock', default=False, type=lambda v: v.lower() == 'true')
     
-    products = load_products()
+    # Check if comparison file already exists
+    comparison_path = os.path.join(os.path.dirname(DATA_PATHS["processed_data"]), "product_comparison.json")
+    if os.path.exists(comparison_path) and not request.args.get('refresh', default=False, type=lambda v: v.lower() == 'true'):
+        try:
+            with open(comparison_path, 'r') as f:
+                comparison_data = json.load(f)
+            logger.info("Loaded existing comparison data")
+            return jsonify(comparison_data)
+        except Exception as e:
+            logger.error(f"Error loading comparison data: {str(e)}")
+            # Continue to generate new comparison if loading fails
     
-    # Filter products by category
-    filtered_products = [p for p in products if p.get("category", "").lower() == category.lower()]
+    # Generate new comparison
+    logger.info(f"Generating product comparison (use_mock={use_mock})")
+    comparison_data = compare_products(use_mock=use_mock)
     
-    # Calculate total count and paginate
-    total_count = len(filtered_products)
-    filtered_products = filtered_products[offset:offset + limit]
+    if not comparison_data:
+        abort(500, description="Failed to generate product comparison")
     
-    return jsonify({
-        "category": category,
-        "products": filtered_products,
-        "metadata": {
-            "total_count": total_count,
-            "limit": limit,
-            "offset": offset,
-            "count": len(filtered_products)
-        }
-    })
+    return jsonify(comparison_data)
 
 def start_flask_api():
     """Start the Flask API server."""

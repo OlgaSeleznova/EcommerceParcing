@@ -1,26 +1,33 @@
 1. Web Scraping
-Target Site: Best Buy
-Product Category: Laptops
+    Target Site: Best Buy
+    Product Category: Laptops
 
-For each product, extract:
-- Product title
-- Price
-- Description
-- Product URL
-- Product rating  
+    For each product, extract:
+    - Product title
+    - Price
+    - Description
+    - Product URL
+    - Product rating  
 
 2. LLM Summarization
-For each product, generate:
-- A concise 2–3 sentence summary
-    Prompt: You are an experienced Marketing specialist. Your task is to maximize sales for the product. Please generate concise 2–3 sentence summary using the following information: Product descrintion {description}, key features {features}. 
-- A tagline or bullet-point highlights
-    Prompt: 
-    You are a marketing copywriter. Based on the following product description and key features, generate:
-        1. A catchy, concise tagline (no more than 10 words) that communicates the product’s main benefit.
-        2. Five bullet-point highlights that summarize the most compelling features and advantages in a way that would appeal to customers.
-        Product Description: {description}
-        Key Features: {features}
+    2.1 A concise 2–3 sentence summary
+        Prompt: You are an experienced Marketing specialist. Your task is to maximize sales for the product. Please generate concise 2–3 sentence summary using the following information: Product descrintion {description}, key features {features}. 
+    2.2 A tagline or bullet-point highlights
+        Prompt: 
+        You are a marketing copywriter. Based on the following product description {description} and key features {features}, generate a catchy, concise tagline (no more than 10 words) that communicates the product’s main benefit. Respond to the question: "What a user can do best with this product?". Finish by mentioning consicely the product name. 
+            For example, 
+            'Unleash limitless creativity with Surface Pro's AI-powered versatility.'
+            'Unleash Power and Portability with ASUS Vivobook 16.'
+            'Elevate Your Efficiency with Zenbook 14 OLED.'
+            
+    2.3 You are a marketing copywriter. Based on the following product description  and key features, generate five bullet-point highlights that summarize the most compelling features and advantages in a way that would appeal to customers.
+            Product Description: {description}
+            Key Features: {features}
+    2.4 A comparison with other products in the same category
+        - Get three products with the highest review rating.
+        - Use Langchain to create an agent to generate 5 questions for comparison criteria. Ask which product is the best for this criteria
+        - Use Langchain to create an agent to generate 5 answers for the questions. Explain why this product is the best in the criteria.
     
 3. Output Results
-API Endpoint: Develop a REST API using Flask with an endpoint like GET /products to serve the data.
-Show the results in a table format.
+    API Endpoint: Develop a REST API using Flask with an endpoint GET /products to serve the data.
+    return the comparison between products 

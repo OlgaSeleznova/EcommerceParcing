@@ -58,9 +58,9 @@ LLM_CONFIG = {
     },
     # Prompt templates
     "PROMPTS": {
-        "summary": "Summarize the following product for a marketing website in 2-3 sentences: {description}",
-        "tagline": "Create a catchy one-line tagline for the following product: {description}",
-        "comparison": "Compare this product to others in its category. Focus on what makes it stand out: {description}"
+        "summary": "You are an experienced Marketing specialist. Your task is to maximize sales for the product. Please generate concise 2–3 sentence summary using the following information: Product descrintion {description}, key features {features}.",
+        "tagline": "You are a marketing copywriter. Based on the following product description {description} and key features {features}, generate a catchy, concise tagline (no more than 10 words) that communicates the product's main benefit. Respond to the question: 'What a user can do best with this product?'. Finish by mentioning consicely the product name. For example, 'Unleash limitless creativity with Surface Pro's AI-powered versatility.' 'Unleash Power and Portability with ASUS Vivobook 16.' 'Elevate Your Efficiency with Zenbook 14 OLED.',",
+        "comparison": ""
     }
 }
 
