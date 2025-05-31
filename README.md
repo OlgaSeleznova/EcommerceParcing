@@ -85,13 +85,14 @@ python -m scraper.bestbuy_scraper --category laptops --count 10
 ### 2. Generate Summaries
 
 ```bash
-python -m summarizer.product_enhancer
+python -m content_enhancer.llm_processor
 ```
 
 ### 3. Start the API Server
-
 ```bash
-python -m api.flask_api
+python run_pipeline.py --skip-scraping --start-api
+
+python run_pipeline.py --skip-scraping --skip-summarization --start-api
 ```
 Access the API at http://127.0.0.1:8888
 

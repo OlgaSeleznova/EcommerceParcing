@@ -7,11 +7,8 @@ import sys
 import json
 import logging
 import argparse
-import subprocess
-# from summarizer.llm_processor import process_all_products
 from content_enhancer.llm_processor import process_products
 from content_enhancer.comparison import compare_products
-# Import configuration
 from config import LOGGING_CONFIG, DATA_PATHS
 
 # Configure logging
@@ -54,59 +51,32 @@ def parse_args():
     )
     return parser.parse_args()
 
-# def run_scraper():
-#     """Run the scraper to collect product data."""
-#     logger.info("Starting web scraping process") 
+def run_scraper():
+    """Run the scraper to collect product data."""
+    logger.info("Starting web scraping process") 
     
-#     try:
-#         # Run the scraper module
-#         subprocess.run([sys.executable, "scraper/main.py"], check=True)
-        
-#         # Check if the data was scraped successfully
-#         if os.path.exists(DATA_PATHS["scraped_data"]):
-#             with open(DATA_PATHS["scraped_data"], "r") as f:
-#                 products = json.load(f)
+    try:
+        # Check if the data was scraped successfully
+        if os.path.exists(DATA_PATHS["scraped_data"]):
+            with open(DATA_PATHS["scraped_data"], "r") as f:
+                products = json.load(f)
                 
-#             logger.info(f"Successfully scraped {len(products)} products")
-#             return True
-#         else:
-#             logger.error("No scraped data found after running scraper")
-#             return False
+            logger.info(f"Found {len(products)} products in existing scraped data")
+            return True
+        else:
+            logger.error("No scraped data found at the specified path")
+            return False
             
-#     except subprocess.CalledProcessError as e:
-#         logger.error(f"Error running scraper: {str(e)}")
-#         return False
-#     except Exception as e:
-#         logger.error(f"Unexpected error during scraping: {str(e)}")
-#         return False
+    except Exception as e:
+        logger.error(f"Unexpected error while checking scraped data: {str(e)}")
+        return False
 
-# def run_summarizer():
-#     """Run the LLM summarizer to process product data."""
-#     try:
-#         # Import the summarizer function
-        
-        
-#         # Process all products
-#         processed_products = process_all_products()
-        
-#         if processed_products:
-#             logger.info(f"Successfully processed {len(processed_products)} products with LLM")
-#             return True
-#         else:
-#             logger.error("No products were processed by the LLM")
-#             return False
-            
-#     except Exception as e:
-#         logger.error(f"Error during LLM summarization: {str(e)}")
-#         return False
 
 def run_content_enhancer(run_comparison=True):
     """Run the content enhancer to process and compare product data."""
     logger.info("Running content enhancer")
     
     try:
-
-        
         # Process the products
         processed_products = process_products(
             input_path=DATA_PATHS["scraped_data"],
@@ -156,7 +126,7 @@ def main():
     
     logger.info("Starting E-Commerce Scraping and LLM Summarization Pipeline")
     
-    # Step 1: Run the scraper (if not skipped)
+    # Step 1: Run the scraper
     if not args.skip_scraping:
         if not run_scraper():
             logger.error("Scraping failed, aborting pipeline")
@@ -170,7 +140,7 @@ def main():
             logger.error("Cannot proceed without scraped data")
             return 1
     
-    # Step 2: Run the content enhancer (if not skipped)
+    # Step 2: Run the content enhancer 
     if not args.skip_summarization:
         # Add API key from command line if provided (overrides .env file)
         if args.api_key:
@@ -193,7 +163,7 @@ def main():
             logger.warning(f"No processed data found at {DATA_PATHS['processed_data']}")
             logger.warning("API will serve raw scraped data instead")
     
-    # Step 3: Start the API server (if requested)
+    # Step 3: Start the API server 
     if args.start_api:
         if not start_api_server():
             logger.error("Failed to start Flask API server")

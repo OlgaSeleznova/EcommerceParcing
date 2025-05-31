@@ -12,7 +12,7 @@ from flask_cors import CORS
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import API_CONFIG, DATA_PATHS, LOGGING_CONFIG
-from comparison.compare_products import compare_products
+from content_enhancer.comparison import compare_products
 
 # Configure logging
 logging.basicConfig(
