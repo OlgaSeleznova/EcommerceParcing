@@ -1,4 +1,8 @@
 # Byte-compiled / optimized / DLL files
+#venv
+ecommerce_parcing/
+
+# sensitive folders
 data/logs/
 *.env
 __pycache__/
