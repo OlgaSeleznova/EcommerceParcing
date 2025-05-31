@@ -10,7 +10,7 @@ This project implements a data pipeline that:
 2. Uses a Large Language Model to generate marketing content for each product:
    - Concise product summaries
    - Catchy taglines
-   - Product insights
+   - Product comparison
 3. Serves the enriched product data through a REST API
 
 ## Technology Stack
@@ -18,7 +18,7 @@ This project implements a data pipeline that:
 - **Language**: Python 3.9+
 - **Web Scraping**: Playwright
 - **LLM Integration**: OpenAI API, with optional support for Hugging Face or local LLMs
-- **API Framework**: FastAPI
+- **API Framework**: Flask
 - **Data Storage**: JSON files (can be extended to databases)
 
 ## Project Structure
@@ -38,7 +38,7 @@ EcommerceParcing/
 │   └── product_enhancer.py     # Product data enrichment logic
 ├── api/
 │   ├── __init__.py
-│   ├── main.py                 # FastAPI application
+│   ├── flask_api.py            # Flask API application
 │   ├── models.py               # Data models
 │   └── routes.py               # API endpoints
 └── data/                       # Directory for storing scraped and processed data
@@ -55,7 +55,7 @@ cd EcommerceParcing
 2. Create a virtual environment and activate it:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate # on MacOS
 ```
 
 3. Install dependencies:
@@ -91,20 +91,17 @@ python -m summarizer.product_enhancer
 ### 3. Start the API Server
 
 ```bash
-uvicorn api.main:app --reload
+python -m api.flask_api
 ```
-Access the API at http://127.0.0.1:8000
+Access the API at http://127.0.0.1:8888
 
 ## API Endpoints
 
 - `GET /products` - Get all products with their summaries
 - `GET /products/{product_id}` - Get a specific product by ID
-- `GET /categories` - Get list of available categories
+- `GET /products/comparison` - Get a comparison of the top 3 rated products
 
-## License
-
-MIT
 
 ## Contributors
 
-- Your Name
+- Olga Seleznova

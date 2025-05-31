@@ -10,14 +10,22 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from operator import itemgetter
+from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 
-# Add parent directory to path
+# Load environment variables from config.env file
+load_dotenv(dotenv_path='config.env')
+
+# Import config
+import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import DATA_PATHS, LOGGING_CONFIG, LLM_CONFIG
+
+# Define comparison output path
+COMPARISON_OUTPUT_PATH = str(Path(DATA_PATHS["processed_data"]).parent / "product_comparison.json")
 
 # Configure logging
 logging.basicConfig(
@@ -101,15 +109,18 @@ def init_langchain_llm():
     Returns:
         ChatOpenAI: Initialized LLM
     """
-    api_key = os.environ.get("OPENAI_API_KEY") or LLM_CONFIG["OpenAI"]["api_key"]
+    # First check environment variable, then config
+    api_key = os.getenv("OPENAI_API_KEY") or LLM_CONFIG["OpenAI"]["api_key"]
     
     if not api_key:
-        logger.error("No OpenAI API key found. Set OPENAI_API_KEY environment variable.")
+        logger.error("No OpenAI API key found. Set OPENAI_API_KEY in config.env file or environment variable.")
         return None
     
+    logger.info("Initializing LangChain with OpenAI")
     return ChatOpenAI(
         model=LLM_CONFIG["OpenAI"]["model"],
         temperature=LLM_CONFIG["OpenAI"]["temperature"],
+        max_tokens=LLM_CONFIG["OpenAI"]["max_tokens"],
         api_key=api_key
     )
 
@@ -135,43 +146,29 @@ def generate_comparison_criteria(llm, products: List[Dict[str, Any]]) -> List[st
     
     all_products_text = "\n\n".join(product_descriptions)
     
-    prompt_template = PromptTemplate(
-        input_variables=["products"],
-        template="""You are a product comparison specialist. 
-        Based on the following product descriptions, generate 5 important comparison criteria that would help a customer decide which product is best.
-        Frame each criterion as a question that asks which product is best for that specific criterion.
-        
-        Products:
-        {products}
-        
-        Output exactly 5 comparison criteria questions, one per line, without numbering or additional text."""
-    )
+    # Get system message and prompt from config
+    config_path = LLM_CONFIG["PROMPTS"]["product_comparison"]["questions"]
+    system_msg = config_path["system_msg"]
+    prompt = config_path["prompt"].format(products=all_products_text)
     
-    chain = LLMChain(llm=llm, prompt=prompt_template)
-    result = chain.run(products=all_products_text)
+    # Create messages for the LLM
+    messages = [
+        SystemMessage(content=system_msg),
+        HumanMessage(content=prompt)
+    ]
+    
+    # Get response from LLM
+    result = llm.predict_messages(messages).content
     
     # Parse the result to get individual questions
     questions = [q.strip() for q in result.strip().split("\n") if q.strip()]
     
-    # Ensure we have exactly 5 questions
-    if len(questions) > 5:
-        questions = questions[:5]
-    elif len(questions) < 5:
-        # Fill in with generic questions if needed
-        generic_questions = [
-            "Which product offers the best performance for its price?",
-            "Which product has the most user-friendly features?",
-            "Which product provides the best long-term value?",
-            "Which product has the most versatile functionality?",
-            "Which product is most suitable for professional use?"
-        ]
-        questions.extend(generic_questions[:(5 - len(questions))])
-    
-    logger.info("Generated 5 comparison criteria questions:")
+    logger.info("Generated comparison criteria questions:")
     for i, question in enumerate(questions):
         logger.info(f"  {i+1}. {question}")
     
     return questions
+
 
 def generate_comparison_answers(llm, products: List[Dict[str, Any]], criteria: List[str]) -> List[Dict[str, Any]]:
     """
@@ -199,22 +196,22 @@ def generate_comparison_answers(llm, products: List[Dict[str, Any]], criteria: L
     comparison_results = []
     
     for criterion in criteria:
-        prompt_template = PromptTemplate(
-            input_variables=["criterion", "products"],
-            template="""You are a product comparison specialist. Based on the following product descriptions, 
-            determine which product is best for the given criterion. Explain your reasoning in 2-3 sentences.
-            
-            Criterion: {criterion}
-            
-            Products:
-            {products}
-            
-            First state which product is best for this criterion (Product 1, Product 2, or Product 3).
-            Then explain why in 2-3 sentences."""
+        # Get system message and prompt from config
+        config_path = LLM_CONFIG["PROMPTS"]["product_comparison"]["responses"]
+        system_msg = config_path["system_msg"]
+        prompt = config_path["prompt"].format(
+            criterion=criterion, 
+            products=all_products_text
         )
         
-        chain = LLMChain(llm=llm, prompt=prompt_template)
-        result = chain.run(criterion=criterion, products=all_products_text)
+        # Create messages for the LLM
+        messages = [
+            SystemMessage(content=system_msg),
+            HumanMessage(content=prompt)
+        ]
+        
+        # Get response from LLM
+        result = llm.predict_messages(messages).content
         
         # Parse the result to extract the winner and explanation
         lines = result.strip().split("\n")
@@ -248,32 +245,18 @@ def generate_comparison_answers(llm, products: List[Dict[str, Any]], criteria: L
     
     return comparison_results
 
-def prepare_comparison_output(products: List[Dict[str, Any]], comparison_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+def prepare_comparison_output(comparison_results: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    Prepare the final comparison output.
+    Prepare the final comparison output with only criteria and results.
     
     Args:
-        products (List[Dict[str, Any]]): List of products being compared
         comparison_results (List[Dict[str, Any]]): Comparison results
         
     Returns:
-        Dict[str, Any]: Structured comparison output
+        Dict[str, Any]: Structured comparison output with only criteria and results
     """
-    product_info = []
-    for i, product in enumerate(products):
-        product_info.append({
-            "id": product.get("id", f"product-{i+1}"),
-            "title": product.get("title", f"Product {i+1}"),
-            "rating": product.get("rating", 0),
-            "price": product.get("price", "N/A"),
-            "url": product.get("url", ""),
-            "summary": product.get("summary", ""),
-            "tagline": product.get("tagline", "")
-        })
-    
     return {
         "timestamp": Path(DATA_PATHS["processed_data"]).stat().st_mtime,
-        "products": product_info,
         "comparison_criteria": [result["criterion"] for result in comparison_results],
         "comparison_results": comparison_results
     }
@@ -299,16 +282,21 @@ def save_comparison_results(comparison_data: Dict[str, Any]) -> bool:
         logger.error(f"Error saving comparison results: {str(e)}")
         return False
 
-def compare_products(use_mock: bool = False) -> Dict[str, Any]:
+def compare_products(output_path: Optional[str] = None) -> Dict[str, Any]:
     """
     Compare the top 3 rated products using Langchain.
     
     Args:
-        use_mock (bool): Whether to use mock data for testing
+        output_path (Optional[str]): Custom path to save comparison results
         
     Returns:
         Dict[str, Any]: Comparison results
     """
+    # Set custom output path if provided
+    global COMPARISON_OUTPUT_PATH
+    if output_path:
+        COMPARISON_OUTPUT_PATH = output_path
+    
     # Load products
     products = load_products()
     if not products:
@@ -320,34 +308,6 @@ def compare_products(use_mock: bool = False) -> Dict[str, Any]:
     if len(top_products) < 2:
         logger.error(f"Not enough rated products for comparison (found {len(top_products)}, need at least 2)")
         return {}
-    
-    if use_mock:
-        # Use mock data for testing
-        logger.info("Using mock data for comparison")
-        
-        mock_criteria = [
-            "Which product offers the best performance for its price?",
-            "Which product has the most user-friendly features?",
-            "Which product provides the best long-term value?",
-            "Which product has the most versatile functionality?",
-            "Which product is most suitable for professional use?"
-        ]
-        
-        mock_results = []
-        for i, criterion in enumerate(mock_criteria):
-            # Alternate winners for variety
-            winner_idx = i % len(top_products)
-            winner = f"Product {winner_idx + 1}"
-            
-            mock_results.append({
-                "criterion": criterion,
-                "winner": f"{winner} is the best for this criterion",
-                "explanation": f"{winner} excels in this area because of its superior specifications and features. It provides exceptional value and performance compared to the alternatives."
-            })
-        
-        comparison_data = prepare_comparison_output(top_products, mock_results)
-        save_comparison_results(comparison_data)
-        return comparison_data
     
     # Initialize Langchain LLM
     llm = init_langchain_llm()
@@ -362,14 +322,14 @@ def compare_products(use_mock: bool = False) -> Dict[str, Any]:
     results = generate_comparison_answers(llm, top_products, criteria)
     
     # Prepare and save the final output
-    comparison_data = prepare_comparison_output(top_products, results)
+    comparison_data = prepare_comparison_output(results)
     save_comparison_results(comparison_data)
     
     return comparison_data
 
+
+
 if __name__ == "__main__":
-    # Determine whether to use mock data based on API key availability
-    api_key = os.environ.get("OPENAI_API_KEY") or LLM_CONFIG["OpenAI"].get("api_key")
-    use_mock = not api_key or api_key == "None"
-    
-    compare_products(use_mock=use_mock)
+    # Process all products with default settings
+    compare_products()
+

@@ -5,8 +5,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from config.env file
+load_dotenv(dotenv_path='config.env')
 
 # Ensure the data directory exists
 DATA_DIR = Path(__file__).parent / "data"
@@ -49,7 +49,7 @@ LLM_CONFIG = {
     # OpenAI configuration
     "OpenAI": {
         "api_key": os.getenv("OPENAI_API_KEY"),
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-4o-mini",
         "temperature": 0.7,
         "max_tokens": 150,
         "top_p": 1.0,
@@ -58,9 +58,41 @@ LLM_CONFIG = {
     },
     # Prompt templates
     "PROMPTS": {
-        "summary": "You are an experienced Marketing specialist. Your task is to maximize sales for the product. Please generate concise 2–3 sentence summary using the following information: Product descrintion {description}, key features {features}.",
-        "tagline": "You are a marketing copywriter. Based on the following product description {description} and key features {features}, generate a catchy, concise tagline (no more than 10 words) that communicates the product's main benefit. Respond to the question: 'What a user can do best with this product?'. Finish by mentioning consicely the product name. For example, 'Unleash limitless creativity with Surface Pro's AI-powered versatility.' 'Unleash Power and Portability with ASUS Vivobook 16.' 'Elevate Your Efficiency with Zenbook 14 OLED.',",
-        "comparison": ""
+        "summary": {
+            "system_msg": "You are an experienced Marketing specialist.",
+            "prompt": """Your task is to maximize sales for the product. Please generate concise 2–3 sentence summary using the following information: 
+            Product description {description}, key features {features}."""
+        },
+        "tagline": {
+            "system_msg": "You are a marketing copywriter. You do not use the word Tagline in your response",
+            "prompt": """Please, generate a catchy, concise tagline, based on the following product description {description}, key features {features}, and title {title}. 
+                Respond to the question: 'What a user can do best with this product?'. Finish by mentioning concisely the product name. Use not more than 10 words.
+                For example, 'Unleash limitless creativity with Surface Pro's AI-powered versatility.', 
+                'Elevate Your Efficiency with Zenbook 14 OLED.'
+                """
+        },
+        "product_comparison": {
+            "questions": {
+                "system_msg": "You are a product comparison specialist.",
+                "prompt": """Based on the following product descriptions, generate 5 important comparison criteria that would help a customer decide which product is best.
+                        Frame each criterion as a question that asks which product is best for that specific criterion.
+                        
+                        Products:
+                        {products}
+                        
+                        Output exactly 5 comparison criteria questions, one per line, without numbering or additional text."""
+            },
+            "responses": {
+                "system_msg": "You are a product comparison specialist.",
+                "prompt": """Based on the following product descriptions, 
+                            determine which product is best for the given criterion. Explain your reasoning in 2-3 sentences.
+                            Criterion: {criterion}
+                            Products:
+                            {products}
+                            First state which product is best for this criterion (Product 1, Product 2, or Product 3).
+                            Then explain why in 2-3 sentences."""
+            }
+        }
     }
 }
 

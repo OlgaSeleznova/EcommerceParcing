@@ -8,9 +8,9 @@ import json
 import logging
 import argparse
 import subprocess
-from pathlib import Path
-from datetime import datetime
-
+# from summarizer.llm_processor import process_all_products
+from content_enhancer.llm_processor import process_products
+from content_enhancer.comparison import compare_products
 # Import configuration
 from config import LOGGING_CONFIG, DATA_PATHS
 
@@ -43,74 +43,95 @@ def parse_args():
     )
     
     parser.add_argument(
-        "--llm-provider",
-        choices=["OpenAI", "Ollama", "HUGGINGFACE"],
-        default="OpenAI",
-        help="LLM provider to use (default: OpenAI)"
-    )
-    
-    parser.add_argument(
-        "--use-real-api",
-        action="store_true",
-        help="Use real API calls instead of mock responses for testing"
-    )
-    
-    parser.add_argument(
         "--start-api",
         action="store_true",
         help="Start the Flask API server after processing"
     )
     
+    parser.add_argument(
+        "--api-key",
+        help="OpenAI API key to use for LLM processing"
+    )
     return parser.parse_args()
 
-def run_scraper():
-    """Run the scraper to collect product data."""
-    logger.info("Starting web scraping process")
+# def run_scraper():
+#     """Run the scraper to collect product data."""
+#     logger.info("Starting web scraping process") 
     
-    try:
-        # Run the scraper module
-        subprocess.run([sys.executable, "scraper/main.py"], check=True)
+#     try:
+#         # Run the scraper module
+#         subprocess.run([sys.executable, "scraper/main.py"], check=True)
         
-        # Check if the data was scraped successfully
-        if os.path.exists(DATA_PATHS["scraped_data"]):
-            with open(DATA_PATHS["scraped_data"], "r") as f:
-                products = json.load(f)
+#         # Check if the data was scraped successfully
+#         if os.path.exists(DATA_PATHS["scraped_data"]):
+#             with open(DATA_PATHS["scraped_data"], "r") as f:
+#                 products = json.load(f)
                 
-            logger.info(f"Successfully scraped {len(products)} products")
-            return True
-        else:
-            logger.error("No scraped data found after running scraper")
-            return False
+#             logger.info(f"Successfully scraped {len(products)} products")
+#             return True
+#         else:
+#             logger.error("No scraped data found after running scraper")
+#             return False
             
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Error running scraper: {str(e)}")
-        return False
-    except Exception as e:
-        logger.error(f"Unexpected error during scraping: {str(e)}")
-        return False
+#     except subprocess.CalledProcessError as e:
+#         logger.error(f"Error running scraper: {str(e)}")
+#         return False
+#     except Exception as e:
+#         logger.error(f"Unexpected error during scraping: {str(e)}")
+#         return False
 
-def run_summarizer(llm_provider="OpenAI", use_mock=True):
-    """Run the LLM summarizer to process product data."""
-    logger.info(f"Starting LLM summarization process with provider: {llm_provider}")
-    if use_mock:
-        logger.info("Using mock LLM responses for testing (no API keys needed)")
+# def run_summarizer():
+#     """Run the LLM summarizer to process product data."""
+#     try:
+#         # Import the summarizer function
+        
+        
+#         # Process all products
+#         processed_products = process_all_products()
+        
+#         if processed_products:
+#             logger.info(f"Successfully processed {len(processed_products)} products with LLM")
+#             return True
+#         else:
+#             logger.error("No products were processed by the LLM")
+#             return False
+            
+#     except Exception as e:
+#         logger.error(f"Error during LLM summarization: {str(e)}")
+#         return False
+
+def run_content_enhancer(run_comparison=True):
+    """Run the content enhancer to process and compare product data."""
+    logger.info("Running content enhancer")
     
     try:
-        # Import the summarizer function
-        from summarizer.llm_processor import process_all_products
+
         
-        # Process all products
-        processed_products = process_all_products(llm_provider=llm_provider, use_mock=use_mock)
+        # Process the products
+        processed_products = process_products(
+            input_path=DATA_PATHS["scraped_data"],
+            output_path=DATA_PATHS["processed_data"],
+        )
         
-        if processed_products:
-            logger.info(f"Successfully processed {len(processed_products)} products with LLM")
-            return True
-        else:
-            logger.error("No products were processed by the LLM")
+        if not processed_products:
+            logger.error("Failed to process products")
             return False
             
+        logger.info(f"Successfully processed {len(processed_products)} products")
+        
+        # Run comparison if requested
+        if run_comparison:
+            logger.info("Running product comparison")
+            comparison_data = compare_products()
+            if comparison_data:
+                logger.info("Successfully generated product comparison")
+            else:
+                logger.warning("Failed to generate product comparison")
+        
+        return True
+            
     except Exception as e:
-        logger.error(f"Error during LLM summarization: {str(e)}")
+        logger.error(f"Error running content enhancer: {str(e)}")
         return False
 
 def start_api_server():
@@ -149,15 +170,23 @@ def main():
             logger.error("Cannot proceed without scraped data")
             return 1
     
-    # Step 2: Run the LLM summarizer (if not skipped)
+    # Step 2: Run the content enhancer (if not skipped)
     if not args.skip_summarization:
-        # Use mock responses by default for testing unless --use-real-api is specified
-        use_mock = not args.use_real_api
-        if not run_summarizer(llm_provider=args.llm_provider, use_mock=use_mock):
-            logger.error("LLM summarization failed, aborting pipeline")
+        # Add API key from command line if provided (overrides .env file)
+        if args.api_key:
+            os.environ["OPENAI_API_KEY"] = args.api_key
+            logger.info("Using OpenAI API key from command line arguments")
+        elif os.getenv("OPENAI_API_KEY"):
+            logger.info("Using OpenAI API key from environment variables")
+        else:
+            logger.warning("No OpenAI API key found. Please set OPENAI_API_KEY in .env file or provide via --api-key argument")
+        
+        # Run content enhancer with comparison
+        if not run_content_enhancer(run_comparison=True):
+            logger.error("Content enhancement failed, aborting pipeline")
             return 1
     else:
-        logger.info("Skipping LLM summarization step")
+        logger.info("Skipping content enhancement step")
         
         # Check if processed data exists
         if not os.path.exists(DATA_PATHS["processed_data"]):
