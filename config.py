@@ -26,12 +26,7 @@ SCRAPER_CONFIG = {
                 "slug": "Laptops",
                 "name": "Laptops & MacBooks",
                 "url": "https://www.bestbuy.ca/en-ca/category/laptops-macbooks/20352"
-            },
-            {
-                "slug": "TV",
-                "name": "Televisions",
-                "url": "https://www.bestbuy.ca/en-ca/category/televisions/20009"
-            },
+            }
         ],
         "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36",
         "headers": {

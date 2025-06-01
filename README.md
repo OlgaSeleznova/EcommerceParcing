@@ -17,9 +17,9 @@ This project implements a data pipeline that:
 
 - **Language**: Python 3.9+
 - **Web Scraping**: Playwright
-- **LLM Integration**: OpenAI API, with optional support for Hugging Face or local LLMs
-- **API Framework**: Flask
-- **Data Storage**: JSON files (can be extended to databases)
+- **LLM Integration**: OpenAI API
+- **API Framework**: Flask with REST API
+- **Data Storage**: JSON files 
 
 ## Project Structure
 
@@ -30,18 +30,23 @@ EcommerceParcing/
 ├── config.py                   # Configuration settings
 ├── scraper/
 │   ├── __init__.py
-│   ├── bestbuy_scraper.py      # Best Buy specific scraper
+│   ├── main.py                 # Best Buy specific scraper
 │   └── utils.py                # Scraping utilities
 ├── summarizer/
 │   ├── __init__.py
-│   ├── llm_client.py           # LLM connection and prompt handling
-│   └── product_enhancer.py     # Product data enrichment logic
+│   ├── llm_processor.py        # LLM connection and prompt handling
+│   └── comparison.py           # Product data enrichment logic
 ├── api/
 │   ├── __init__.py
 │   ├── flask_api.py            # Flask API application
-│   ├── models.py               # Data models
-│   └── routes.py               # API endpoints
-└── data/                       # Directory for storing scraped and processed data
+│   ├── main.py                 # API entry point
+├── data/                       # Directory for storing scraped and processed data 
+│   ├── logs/                   # Directory for storing logs
+├── run_pipeline.py             # Pipeline entry point
+├── start_flask_api.py          # Script to start the Flask API server
+├── Dockerfile                  # Dockerfile for containerization
+├── cloudbuild.yaml             # Cloud Build configuration
+├── ecommerce_parce/            # Python virtual environment directory
 ```
 
 ## Installation
@@ -50,6 +55,61 @@ EcommerceParcing/
 ```bash
 git clone https://github.com/yourusername/EcommerceParcing.git
 ```
+
+2. Create a virtual environment and activate it:
+```bash
+python -m venv ecommerce_parce
+source ecommerce_parce/bin/activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Install Playwright browsers:
+```bash
+playwright install
+```
+
+5. Set up environment variables:
+```bash
+# Create a .env file with your API keys
+echo "OPENAI_API_KEY=your_key_here" > .env
+```
+## Usage
+
+### 1. Run the Scraper
+
+```bash
+python -m scraper.bestbuy_scraper --category laptops --count 10
+```
+
+### 2. Generate Summaries
+
+```bash
+python -m content_enhancer.llm_processor
+```
+### 3. Generate Product comparison
+```bash
+python -m content_enhancer.comparison
+```
+### 4. Start the API Server
+```bash
+python run_pipeline.py --skip-scraping --start-api
+```
+
+```bash
+python run_pipeline.py --skip-scraping --skip-summarization --start-api
+```
+
+Access the API at http://127.0.0.1:8888
+
+## API Endpoints
+
+- `GET /products` - Get all products with their summaries
+- `GET /products/{product_id}` - Get a specific product by ID
+- `GET /products/comparison` - Get a comparison of the top 3 rated products
 
 ## Deployment
 
@@ -80,7 +140,7 @@ gcloud init
 gcloud auth login
 ```
 
-4. Set your GCP project:
+4. Set GCP project:
 ```bash
 gcloud config set project YOUR_PROJECT_ID
 ```
@@ -91,7 +151,7 @@ gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
 ```
 
-6. Set your OpenAI API key as a secret:
+6. Set OpenAI API key as a secret:
 ```bash
 gcloud secrets create OPENAI_API_KEY --replication-policy=automatic
 gcloud secrets versions add OPENAI_API_KEY --data-file=- # Enter your API key when prompted
@@ -105,56 +165,6 @@ gcloud builds submit --config=cloudbuild.yaml --substitutions=_OPENAI_API_KEY=YO
 8. Access your deployed API at the URL provided in the Cloud Run console
 cd EcommerceParcing
 ```
-
-2. Create a virtual environment and activate it:
-```bash
-python -m venv venv
-source venv/bin/activate # on MacOS
-```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Install Playwright browsers:
-```bash
-playwright install
-```
-
-5. Set up your environment variables:
-```bash
-# Create a .env file with your API keys
-echo "OPENAI_API_KEY=your_key_here" > .env
-```
-
-## Usage
-
-### 1. Run the Scraper
-
-```bash
-python -m scraper.bestbuy_scraper --category laptops --count 10
-```
-
-### 2. Generate Summaries
-
-```bash
-python -m content_enhancer.llm_processor
-```
-
-### 3. Start the API Server
-```bash
-python run_pipeline.py --skip-scraping --start-api
-
-python run_pipeline.py --skip-scraping --skip-summarization --start-api
-```
-Access the API at http://127.0.0.1:8888
-
-## API Endpoints
-
-- `GET /products` - Get all products with their summaries
-- `GET /products/{product_id}` - Get a specific product by ID
-- `GET /products/comparison` - Get a comparison of the top 3 rated products
 
 
 ## Contributors

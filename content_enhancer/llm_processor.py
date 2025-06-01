@@ -4,10 +4,8 @@ LLM Processing module for generating product summaries and taglines.
 import os
 import json
 import logging
-import requests
 from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Any, Union, Optional
+from typing import Dict, List, Any, Optional
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -213,7 +211,7 @@ class LLMProcessor:
             description=description or "No description provided.",
             features=feature_text,
             title=title or "the product"
-        ) + "\n\nIMPORTANT: Please format your response with: \n1. 'Tagline:' followed by a catchy tagline that incorporates the product title\n2. A bulleted list of highlights using '-' at the start of each bullet point."
+        ) + "\n\nIMPORTANT: Please format your response with: \n1. Tagline: followed by a catchy tagline that incorporates the product title\n2. Highlights: A bulleted list of highlights using '-' at the start of each bullet point."
         
         response = self._openai_request(prompt, system_msg=system_msg, max_retries=2)
         

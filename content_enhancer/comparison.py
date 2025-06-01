@@ -9,12 +9,10 @@ import json
 import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
-from operator import itemgetter
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
+
 
 # Load environment variables from config.env file
 load_dotenv(dotenv_path='config.env')
@@ -23,9 +21,6 @@ load_dotenv(dotenv_path='config.env')
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import DATA_PATHS, LOGGING_CONFIG, LLM_CONFIG
-
-# Define comparison output path
-COMPARISON_OUTPUT_PATH = str(Path(DATA_PATHS["processed_data"]).parent / "product_comparison.json")
 
 # Configure logging
 logging.basicConfig(

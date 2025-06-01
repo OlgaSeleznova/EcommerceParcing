@@ -10,6 +10,7 @@ from playwright.async_api import async_playwright
 
 # Add the parent directory to the path to import from the root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from tqdm import tqdm
 from config import SCRAPER_CONFIG, DATA_PATHS
 from scraper.utils import (
     setup_logger,
@@ -99,14 +100,12 @@ async def main():
             
             if not product_links:
                 logger.error("No product links found. Taking screenshot for debugging.")
-                await page.screenshot(path="debug_no_products.png")
                 return []
             
             # Limit to the number requested
             product_links = product_links[:args.count]
             
             # Use tqdm for progress bar when running in a terminal
-            from tqdm import tqdm
             for url in tqdm(product_links, desc="Scraping products"):
                 # Try multiple times in case of errors
                 for attempt in range(3):
