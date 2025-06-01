@@ -3,7 +3,6 @@
 ecommerce_parcing/
 
 # sensitive folders
-data/logs/
 *.env
 __pycache__/
 */__pycache__/
@@ -14,6 +13,7 @@ scrapers/__pycache__/
 processors/__pycache__/
 
 # Log files
+.DS_Store
 data/logs/
 *.log
 

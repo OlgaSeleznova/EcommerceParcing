@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ecommerce-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    command: python run_pipeline.py --skip-scraping --start-api
+    
+    # Uncomment the following lines if you want to use a specific .env file
+    # env_file:
+    #   - .env
+    
+    # For development, you might want to mount the code directly to enable hot reloading
+    # volumes:
+    #   - .:/app
+    #   - /app/data

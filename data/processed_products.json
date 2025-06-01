@@ -20,16 +20,18 @@
     "rating": "4.0",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:18:51.822105",
-    "summary": "Unleash your gaming potential with the ASUS TUF A15 15.6-inch gaming laptop, powered by an AMD Ryzen 5 7535HS processor and 16GB DDR5 RAM for lightning-fast performance. With a stunning 1920 x 1080 resolution and 144Hz refresh rate, plus durable MIL-STD-810H construction, this laptop is built for gamers who demand reliability and exceptional graphics. Enjoy seamless multitasking and ample storage with a 1TB SSD, while advanced connectivity options keep you in the game.",
-    "tagline": "Conquer every challenge with the ASUS TUF A15 gaming power.",
+    "summary": "Unleash your gaming potential with the ASUS TUF A15 15.6-inch gaming laptop, featuring a powerful AMD Ryzen 5 7535HS processor, 16GB DDR5 RAM, and a lightning-fast 1TB SSD for seamless multitasking and ample storage. Enjoy stunning visuals and smooth gameplay with the NVIDIA GeForce RTX 3050 GPU and a 144Hz display, all housed in a rugged design that meets military durability standards. Experience reliable connectivity with Wi-Fi 6 and a variety of ports, all powered by Windows 11 for enhanced performance and security.",
+    "tagline": "Conquer every challenge with ASUS TUF Gaming A15.",
     "highlights": [
-      "Lightning-fast AMD Ryzen 5 processor for seamless multitasking",
-      "Stunning 15.6-inch FHD display with 144Hz refresh rate",
-      "NVIDIA GeForce RTX 3050 for immersive graphics and gameplay",
-      "Durable MIL-STD-810H design withstands the toughest conditions",
-      "1TB SSD for rapid load times and extensive storage",
-      "Wi-Fi 6 connectivity ensures reliable online gaming experience",
-      "Preinstalled Windows 11 for enhanced performance and security"
+      "Exceptional speed with AMD Ryzen 5 7535HS processor",
+      "Seamless multitasking powered by 16GB DDR5 RAM",
+      "Lightning-fast 1TB SSD storage for all your games",
+      "Stunning visuals with NVIDIA GeForce RTX 3050 GPU",
+      "Crisp 15.6-inch display at 144Hz refresh rate",
+      "Reliable Wi-Fi 6 and Bluetooth 5.3 connectivity",
+      "Versatile ports for all your external devices",
+      "Built to withstand tough conditions with MIL-STD-810H durability",
+      "Preinstalled Windows 11 for enhanced performance and security."
     ]
   },
   {
@@ -58,19 +60,19 @@
     "rating": "5.0",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:19:26.610429",
-    "summary": "Experience seamless computing on the go with the Dell Inspiron 15, featuring a powerful Intel Core i7 1355U processor and 16GB RAM for smooth multitasking. Its stunning 15.6-inch touchscreen display, ample 1TB SSD storage, and built-in HD webcam make it perfect for work, entertainment, and video chats. With enhanced wireless connectivity and ComfortView technology to reduce eye strain, this laptop is designed to elevate your productivity and enjoyment wherever you are.",
-    "tagline": "Experience Unmatched Performance with Dell Inspiron 15 Touchscreen Laptop.",
+    "summary": "Experience unparalleled performance on the go with the Dell Inspiron 15, featuring a powerful Intel Core i7 1355U processor, 16GB RAM, and a stunning 15.6-inch touchscreen display. With a spacious 1TB SSD for rapid data access, versatile connectivity options, and an ergonomic design, this laptop is perfect for seamless multitasking, gaming, and video calls. Enjoy enhanced comfort and security with ComfortView technology and Windows 11 Home, making your computing experience both efficient and enjoyable.",
+    "tagline": "Discover Dynamic Performance with Dell Inspiron 15 Touchscreen Laptop.",
     "highlights": [
-      "Seamless multitasking with Intel Core i7 and 16GB RAM",
-      "Immersive visuals on a 15.6-inch Full HD touchscreen",
-      "Fast data access with 1TB SSD storage",
-      "Ergonomic lift hinge for comfortable typing",
-      "High-quality video chats with built-in HD webcam",
-      "Advanced wireless connectivity with Wi-Fi 6",
-      "Long-lasting battery for worry-free usage",
-      "Versatile ports for all your devices",
-      "ComfortView technology for eye-friendly viewing",
-      "Windows 11 for enhanced security and streamlined performance"
+      "Intel Core i7 processor for fast, efficient multitasking.",
+      "16GB RAM ensures smooth performance across applications.",
+      "1TB SSD for quick data access and ample storage.",
+      "15.6-inch touchscreen with 1920 x 1080 resolution.",
+      "Enhanced connectivity with Wi-Fi 6 and Bluetooth.",
+      "Ergonomic lift hinge for comfortable typing.",
+      "Built-in HD webcam for high-quality video chats.",
+      "ComfortView software reduces eye strain during long sessions.",
+      "Windows 11 Home for secure and streamlined computing.",
+      "Versatile connectivity options with multiple USB ports."
     ]
   },
   {
@@ -84,15 +86,15 @@
     "rating": "4.5",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:20:01.233369",
-    "summary": "Experience unparalleled gaming and productivity with the Lenovo Legion 5 16\" Gaming Laptop in Luna Grey. Powered by the Intel Core i9-14900HX, 32GB of RAM, and an NVIDIA GeForce RTX 4060 GPU, this high-performance machine ensures ultra-smooth multitasking and stunning visuals on its 16-inch display. Elevate your gaming experience and tackle demanding tasks effortlessly with Windows 11, designed to optimize performance for gamers and power users alike.",
-    "tagline": "Dominate the game with Lenovo Legion 5's raw power.",
+    "summary": "Unleash your gaming potential with the Lenovo Legion 5 16\" Gaming Laptop in Luna Grey, featuring a cutting-edge Intel Core i9-14900HX processor, 32GB of RAM, and a blazing-fast 1TB SSD. Experience stunning graphics with the NVIDIA GeForce RTX 4060 GPU, ensuring exceptional performance for both gaming and multitasking. With Windows 11, enjoy seamless productivity and immersive visuals on a striking 16-inch display\u2014this is the ultimate machine for serious gamers and power users alike.",
+    "tagline": "Dominate every game with Lenovo Legion 5's power.",
     "highlights": [
-      "Intel Core i9-14900HX for unmatched performance",
+      "Intel Core i9-14900HX for lightning-fast performance",
+      "Stunning 16\" display for immersive gaming",
       "32GB RAM for seamless multitasking",
-      "1TB SSD for lightning-fast load times",
-      "NVIDIA GeForce RTX 4060 for stunning graphics",
-      "Immersive 16-inch display for an enhanced gaming experience",
-      "Windows 11 for optimized gaming and productivity"
+      "1TB SSD for rapid load times",
+      "NVIDIA GeForce RTX 4060 for breathtaking graphics",
+      "Optimized with Windows 11 for gaming and productivity"
     ]
   },
   {
@@ -119,17 +121,16 @@
     "rating": "4.9",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:20:36.106338",
-    "summary": "Experience unparalleled performance with the 13-inch MacBook Air, powered by the M4 chip, designed for seamless multitasking, video editing, and gaming. Enjoy stunning visuals on a Liquid Retina display, up to 18 hours of battery life, and a lightweight design that fits your on-the-go lifestyle. With Apple Intelligence for enhanced productivity and intuitive connectivity with your other Apple devices, this MacBook Air is the ultimate tool for work and play.",
-    "tagline": "Experience unmatched power with the 13.6\" MacBook Air.",
+    "summary": "Experience unparalleled performance with the 13-inch MacBook Air powered by the M4 chip, designed for both work and play. Enjoy up to 18 hours of battery life, a stunning Liquid Retina display that supports one billion colors, and seamless integration with your Apple devices. Ultra-light and incredibly thin, this laptop is perfect for your on-the-go lifestyle, ensuring you stay productive and entertained anywhere you are.",
+    "tagline": "Experience unmatched performance with the 13.6\" MacBook Air.",
     "highlights": [
-      "Supercharged by the M4 chip for seamless multitasking.",
-      "Stunning Liquid Retina display with vibrant colors.",
-      "Up to 18 hours of battery life for all-day productivity.",
-      "Ultra-thin and lightweight design for easy portability.",
-      "Built-in Apple Intelligence for effortless creativity.",
-      "Crystal-clear video calls with a 12MP Center Stage camera.",
-      "Supports multiple external displays for enhanced workflow.",
-      "Effortlessly integrates with other Apple devices for a seamless experience."
+      "Supercharged by the M4 chip for seamless multitasking",
+      "Brilliant Liquid Retina display with one billion colors",
+      "Up to 18 hours of battery life for all-day productivity",
+      "Ultra-thin and lightweight design for on-the-go convenience",
+      "Built-in Apple Intelligence for effortless creativity and organization",
+      "Stunning audio and video quality with advanced camera and speakers",
+      "Connects effortlessly with other Apple devices for a seamless experience"
     ]
   },
   {
@@ -161,19 +162,19 @@
     "rating": "4.3",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:21:11.286280",
-    "summary": "Elevate your productivity with the HP OmniBook X 14-inch Gen AI PC laptop, powered by a Snapdragon X Plus processor and equipped with 16GB DDR4 RAM and a 1TB SSD for lightning-fast performance and ample storage. Enjoy stunning visuals on its 2.2K IPS display, enhanced audio quality, and seamless connectivity with Wi-Fi 6E, all while benefiting from a lightweight design and an impressive 24-hour battery life. Perfect for professionals on the go, this laptop combines power, portability, and cutting-edge features to redefine your computing experience.",
-    "tagline": "Empower Your Productivity with HP OmniBook X 14\" Laptop.",
+    "summary": "Elevate your computing experience with the HP OmniBook X 14-inch Gen AI PC laptop, featuring a powerful Snapdragon X Plus processor, 16GB of RAM, and a 1TB SSD for lightning-fast performance and ample storage. Its stunning 2.2K IPS display, crystal-clear 5MP IR camera, and features like low blue light technology and a backlit keyboard make it perfect for both work and play. With extended battery life, lightweight design, and versatile connectivity options, the HP OmniBook X is the ultimate laptop for those on the go.",
+    "tagline": "Experience Unmatched Power with HP OmniBook X 14\" Laptop.",
     "highlights": [
       "Snapdragon X Plus processor for lightning-fast performance.",
-      "16GB RAM enables seamless multitasking.",
-      "1TB SSD provides ample space for all your files.",
+      "16GB RAM for seamless multitasking and responsiveness.",
+      "1TB SSD for extensive storage and quick access.",
       "Stunning 2.2K display for vibrant visuals.",
-      "Extended 24-hour battery life for all-day use.",
-      "Integrated 5MP IR camera for high-quality video calls.",
-      "Lightweight design for ultimate portability.",
-      "Versatile connectivity options for all your devices.",
-      "Enhanced audio experience with dual speakers and HP Audio Boost.",
-      "Preinstalled Windows 11 Home for optimal performance."
+      "24-hour battery life to keep you productive on the go.",
+      "Dual-array microphones for crystal-clear communication.",
+      "Lightweight and portable design at just 2.97lbs.",
+      "Versatile connectivity with multiple USB ports.",
+      "Backlit keyboard for comfortable typing in any lighting.",
+      "Windows 11 Home for enhanced security and performance."
     ]
   },
   {
@@ -201,18 +202,17 @@
     "rating": "0",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:21:44.040584",
-    "summary": "Experience unparalleled flexibility and performance with the ASUS Vivobook 14 Flip two-in-one laptop, powered by an Intel Core i5-1335U processor and 8GB DDR4 RAM for seamless multitasking. With a stunning 14-inch FHD touchscreen, 512GB SSD for ample storage, and versatile connectivity options, this laptop is designed to keep you productive anywhere, anytime. Plus, its innovative NumberPad and long-lasting battery ensure you can tackle any task with ease and confidence.",
-    "tagline": "Experience versatility and power with ASUS Vivobook 14 Flip.",
+    "summary": "Experience ultimate versatility and performance with the ASUS Vivobook 14 Flip two-in-one laptop, featuring an Intel Core i5-1335U processor and 8GB DDR4 RAM for seamless efficiency. Store all your essential files on its spacious 512GB SSD while enjoying vibrant visuals on the 14-inch FHD touchscreen. With a flexible design, advanced connectivity, and long-lasting battery, this laptop is your ideal companion for work and play anywhere, anytime.",
+    "tagline": "Transform your workflow with ASUS Vivobook 14 Flip's versatility.",
     "highlights": [
-      "Intel Core i5-1335U processor for fast performance",
-      "8GB DDR4 RAM ensures smooth multitasking",
-      "512GB SSD offers ample storage for files",
-      "14-inch FHD touchscreen for vibrant visuals",
-      "Two-in-one design for flexible usage options",
-      "NumberPad simplifies data entry tasks",
-      "Wi-Fi 6E and Bluetooth 5.3 for reliable connectivity",
-      "Long-lasting battery reduces recharging worries",
-      "Preinstalled Windows 11 Home for enhanced user experience"
+      "Fast performance with Intel Core i5-1335U and 8GB RAM",
+      "Ample storage with 512GB SSD for all your files",
+      "Stunning visuals on a 14-inch FHD touchscreen",
+      "Reliable connectivity with Wi-Fi 6E and Bluetooth 5.3",
+      "Flexible two-in-one design adapts to your needs",
+      "Quick data entry with integrated NumberPad",
+      "Enhanced privacy with FHD camera and shutter",
+      "Preinstalled Windows 11 for a user-friendly experience"
     ]
   },
   {
@@ -241,19 +241,18 @@
     "rating": "3.8",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:22:19.016007",
-    "summary": "Experience exceptional performance and portability with the Lenovo IdeaPad 1i laptop. Powered by an Intel Celeron N4500 processor, 4GB of RAM, and boasting a vibrant 14-inch HD display, this laptop ensures seamless multitasking and immersive audio with Dolby speakers. With up to 11 hours of battery life, rapid charging, and versatile connectivity options, the IdeaPad 1i is perfect for both productivity and entertainment on the go.",
-    "tagline": "Discover seamless productivity with Lenovo IdeaPad 1i.",
+    "summary": "Experience seamless multitasking with the Lenovo IdeaPad 1i laptop, powered by an Intel Celeron N4500 processor and 4GB of RAM, perfect for your everyday tasks. Its 14-inch HD display and Dolby Audio speakers ensure an immersive viewing and listening experience, while the lightweight design and impressive 11-hour battery life make it an ideal companion for on-the-go productivity. Plus, with advanced Wi-Fi 6 connectivity and versatile ports, staying connected has never been easier.",
+    "tagline": "Maximize productivity on the go with Lenovo IdeaPad 1i.",
     "highlights": [
-      "Effortlessly multitask with Intel Celeron N4500 and 4GB RAM.",
-      "Enjoy crisp visuals on a 14-inch HD display.",
-      "Stay connected with Wi-Fi 6 and Bluetooth 5.2.",
-      "Experience rich sound with Dolby Audio speakers.",
-      "Work all day with up to 11 hours of battery life.",
-      "Portable design at just 0.7 inches thick.",
-      "Versatile connectivity options for all your peripherals.",
-      "Instant power-on with Flip to Start feature.",
-      "Enhanced security with Windows 11 in S mode.",
-      "Perfect for both work and entertainment."
+      "Efficient multitasking powered by Intel Celeron N4500 and 4GB RAM",
+      "Crisp visuals on a 14-inch HD display",
+      "Immersive sound from Dolby Audio speakers",
+      "Up to 11 hours of battery life for all-day use",
+      "Versatile connectivity with multiple USB ports and HDMI",
+      "Lightweight design at just 0.7 inches thick",
+      "Smart Noise Cancelling for enhanced video calls",
+      "Instant power-on with Flip to Start feature",
+      "Secure and streamlined experience with Windows 11 in S mode"
     ]
   },
   {
@@ -283,19 +282,19 @@
     "rating": "0",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:22:53.975464",
-    "summary": "Elevate your productivity with the ultra-thin Microsoft Surface Pro 12\" tablet, designed for versatility as both a tablet and laptop. Featuring a stunning PixelSense Flow LCD touchscreen, powerful Qualcomm Snapdragon X Plus processor, and advanced AI capabilities, this device ensures seamless multitasking and exceptional visuals. With up to 16 hours of battery life and convenient USB-C connectivity, stay charged and connected on the go\u2014perfect for today\u2019s dynamic work environment.",
-    "tagline": "Empower your productivity with Microsoft Surface Pro 12\".",
+    "summary": "Stay productive and creative on the go with the ultra-thin Microsoft Surface Pro 12\" tablet, designed for versatility as both a tablet and a laptop. Featuring a stunning PixelSense Flow touchscreen, powerful Qualcomm Snapdragon X Plus processor, and up to 16 hours of battery life, this device enhances your efficiency with advanced AI capabilities. Experience seamless connectivity with dual USB-C ports and enjoy exclusive Copilot+ experiences for an unparalleled boost in productivity.",
+    "tagline": "Stay Creative Anywhere with the Microsoft Surface Pro 12\".",
     "highlights": [
-      "Ultra-thin design for on-the-go versatility",
-      "Transform from tablet to laptop effortlessly",
-      "Stunning 12\" PixelSense Flow touchscreen",
-      "Powered by Qualcomm Snapdragon X Plus for seamless performance",
-      "Advanced AI capabilities for enhanced creativity",
-      "Up to 16 hours of battery life for all-day use",
-      "Dual USB-C ports for quick charging and data transfer",
-      "Built-in kickstand for flexible viewing angles",
-      "Instant access with Windows Hello facial recognition",
-      "Compatible with Surface Slim Pen for enhanced functionality"
+      "Ultra-thin and lightweight design for on-the-go productivity.",
+      "Dual functionality as a tablet and laptop.",
+      "Stunning PixelSense Flow LCD touchscreen for vibrant visuals.",
+      "Powered by Qualcomm Snapdragon X Plus for seamless performance.",
+      "Up to 16 hours of battery life for all-day use.",
+      "Fast data transfer and charging with USB-C ports.",
+      "Flexible 165-degree kickstand for comfortable viewing angles.",
+      "Instant access with facial recognition via Windows Hello.",
+      "Exclusive Copilot+ PC experiences for enhanced productivity.",
+      "Built-in storage for Surface Slim Pen for ultimate convenience."
     ]
   },
   {
@@ -323,18 +322,18 @@
     "rating": "0",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:23:27.927886",
-    "summary": "Experience unmatched productivity on the go with the HP 15.6-inch laptop, powered by an AMD Ryzen 7 7730U processor and 16GB of RAM for seamless multitasking. Enjoy a vivid Full HD display, 1TB SSD for ample storage, and up to 10 hours of battery life, all while staying connected through advanced Wi-Fi 6 and Bluetooth 5.4 technology. Plus, with eco-friendly materials and Windows 11 preinstalled, this laptop combines performance, sustainability, and user-friendly features for the modern professional.",
+    "summary": "Elevate your productivity with the HP 15.6-inch laptop, powered by an AMD Ryzen 7 7730U processor and 16GB of RAM for seamless multitasking. With a stunning Full HD display, 1TB SSD for lightning-fast data access, and up to 10 hours of battery life, this laptop is perfect for on-the-go professionals. Experience rich audio, reliable connectivity, and a user-friendly Windows 11 operating system, all while supporting eco-conscious practices with its recycled materials.",
     "tagline": "Maximize productivity on the go with HP 15.6\" Laptop.",
     "highlights": [
       "Powerful AMD Ryzen 7 processor for seamless multitasking.",
-      "16GB RAM handles demanding tasks effortlessly.",
-      "1TB SSD offers fast access and ample storage.",
-      "Vibrant Full HD display for immersive viewing.",
-      "Long-lasting battery life for up to 10 hours.",
-      "Advanced Wi-Fi 6 and Bluetooth 5.4 connectivity.",
-      "Dual speakers enhance your multimedia experience.",
-      "HP True Vision HD camera ensures clear communication.",
-      "Comfortable full-size keyboard for efficient typing.",
+      "16GB RAM for handling demanding tasks effortlessly.",
+      "1TB SSD for fast data access and ample storage.",
+      "Stunning Full HD display for immersive visuals.",
+      "Reliable Wi-Fi 6 and Bluetooth 5.4 connectivity options.",
+      "Up to 10 hours of battery life for all-day use.",
+      "Versatile ports for enhanced connectivity.",
+      "Clear audio from dual speakers for multimedia enjoyment.",
+      "HP True Vision HD camera for crystal-clear video calls.",
       "Eco-friendly design built with recycled materials."
     ]
   },
@@ -365,18 +364,19 @@
     "rating": "4.4",
     "source": "BestBuy",
     "scraped_at": "2025-05-30T17:24:03.820666",
-    "summary": "Experience unparalleled performance and versatility with the ASUS Vivobook 14 Flip, a powerful two-in-one laptop featuring a cutting-edge Intel Core i7-13700H processor, 16GB RAM, and a spacious 1TB SSD. Enjoy stunning visuals on its 14\" WUXGA Touch display, seamless connectivity with Wi-Fi 6E and Bluetooth 5.3, and the convenience of a backlit keyboard\u2014all packed into a sleek design that's perfect for work or play. Elevate your computing experience today with this impressive blend of power and functionality!",
-    "tagline": "Experience Seamless Versatility with ASUS Vivobook 14 Flip.",
+    "summary": "Experience unmatched performance and versatility with the ASUS Vivobook 14 Flip, a powerful two-in-one laptop featuring a 13th Gen Intel Core i7-13700H processor, 16GB DDR4 RAM, and a spacious 1TB SSD for seamless multitasking and storage. Its stunning 14\" WUXGA touchscreen display, vibrant Intel Iris XE graphics, and long-lasting battery make it perfect for both work and entertainment, while the sleek design and comprehensive connectivity options enhance your on-the-go lifestyle. Elevate your computing experience today with the ASUS Vivobook 14 Flip!",
+    "tagline": "Experience seamless multitasking with ASUS Vivobook 14 Flip!",
     "highlights": [
-      "Powerful Intel Core i7-13700H for demanding tasks.",
-      "16GB DDR4 RAM for lag-free multitasking.",
-      "1TB SSD for ample storage and quick access.",
-      "Stunning 14\" WUXGA Touch display with vibrant visuals.",
-      "Integrated Wi-Fi 6E for fast internet connectivity.",
-      "Convenient connectivity options including USB-C and HDMI.",
-      "1080p Full HD camera for clear video calls.",
-      "Backlit keyboard for efficient typing in any light.",
-      "Pre-installed Windows 11 for enhanced productivity."
+      "Powerful Intel Core i7-13700H for demanding tasks",
+      "16GB DDR4 RAM for smooth multitasking",
+      "1TB SSD for quick storage and boot-ups",
+      "Stunning 14\" touchscreen with WUXGA resolution",
+      "Fast Wi-Fi 6E and Bluetooth 5.3 connectivity",
+      "Long-lasting 50Wh battery for on-the-go use",
+      "Versatile ports for easy device connections",
+      "Crystal-clear 1080p HD camera with privacy shutter",
+      "Backlit keyboard for efficient typing in any light",
+      "Windows 11 Home OS for enhanced productivity"
     ]
   }
 ]

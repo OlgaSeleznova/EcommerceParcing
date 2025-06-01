@@ -49,6 +49,60 @@ EcommerceParcing/
 1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/EcommerceParcing.git
+```
+
+## Deployment
+
+### Local Deployment with Docker
+
+1. Build and run the Docker container:
+```bash
+docker-compose up -d
+```
+
+2. Access the API at http://localhost:8888
+
+### Google Cloud Platform (GCP) Deployment
+
+1. Install Google Cloud SDK:
+```bash
+# For macOS
+brew install --cask google-cloud-sdk
+```
+
+2. Initialize the Google Cloud SDK:
+```bash
+gcloud init
+```
+
+3. Authenticate with Google Cloud:
+```bash
+gcloud auth login
+```
+
+4. Set your GCP project:
+```bash
+gcloud config set project YOUR_PROJECT_ID
+```
+
+5. Enable required APIs:
+```bash
+gcloud services enable cloudbuild.googleapis.com
+gcloud services enable run.googleapis.com
+```
+
+6. Set your OpenAI API key as a secret:
+```bash
+gcloud secrets create OPENAI_API_KEY --replication-policy=automatic
+gcloud secrets versions add OPENAI_API_KEY --data-file=- # Enter your API key when prompted
+```
+
+7. Deploy to Cloud Run using Cloud Build:
+```bash
+gcloud builds submit --config=cloudbuild.yaml --substitutions=_OPENAI_API_KEY=YOUR_API_KEY
+```
+
+8. Access your deployed API at the URL provided in the Cloud Run console
 cd EcommerceParcing
 ```
 

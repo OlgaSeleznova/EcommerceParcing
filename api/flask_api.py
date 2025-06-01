@@ -169,9 +169,15 @@ def get_product_comparison():
 
 def start_flask_api():
     """Start the Flask API server."""
+    # Get port from environment variable for Cloud Run compatibility
+    port = int(os.environ.get("PORT", API_CONFIG["port"]))
+    host = "0.0.0.0"  # Bind to all interfaces for cloud environments
+    
+    logger.info(f"Starting Flask API server on {host}:{port}")
+    
     app.run(
-        host=API_CONFIG["host"],
-        port=API_CONFIG["port"], 
+        host=host,
+        port=port, 
         debug=API_CONFIG["debug"]
     )
 

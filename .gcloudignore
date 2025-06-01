@@ -1,0 +1,29 @@
+# Exclude git and cache directories
+.git
+.github
+__pycache__
+*.pyc
+.DS_Store
+
+# Exclude virtual environment
+venv/
+env/
+.env
+
+# Exclude local development files
+*.log
+traces/
+.vscode/
+.idea/
+
+# Exclude local data (if needed)
+# Uncomment if you don't want to upload scraped data
+# data/scraped_*.json
+
+# Don't upload Docker and GCP files
+.dockerignore
+docker-compose.yml
+
+# Exclude tests
+test/
+tests/
