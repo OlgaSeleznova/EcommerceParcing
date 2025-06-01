@@ -205,23 +205,17 @@ async def extract_title(page: Page, logger: logging.Logger) -> Optional[str]:
 
 
 async def extract_price(page: Page, logger: logging.Logger, title: str) -> str:
-    """
-    Uses multiple techniques to extract the price from a Best Buy product page.
-    
+    """    
     Args:
         page: Playwright page object
         product_id: Product ID extracted from URL
         url: Full URL of the product
         
     Returns:
-        str: Extracted price or fallback value
+        str: Extracted price 
     """
-    # No fallback to expected prices - we'll only use what we can scrape
     
-    # Try multiple extraction techniques
-    price = None
-    
-    # 1. Try JSON-LD data
+    # JSON-LD data
     try:
         script_content = await page.evaluate('''
             Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
@@ -236,102 +230,17 @@ async def extract_price(page: Page, logger: logging.Logger, title: str) -> str:
                     if 'offers' in data and isinstance(data['offers'], dict) and 'price' in data['offers']:
                         price = f"${data['offers']['price']}"
                         logger.info(f"Found price in JSON-LD offers: {price}")
-                        print(f"Found price in JSON-LD offers: {price}")
                         break
                     # Check for price directly in data
                     elif 'price' in data:
                         price = f"${data['price']}"
                         logger.info(f"Found price in JSON-LD root: {price}")
-                        print(f"Found price in JSON-LD root: {price}")
                         break
             except Exception:
                 continue
     except Exception as e:
         print(f"Error extracting from JSON-LD: {str(e)}")
     
-    # 2. Try to find price in product schema from HTML
-    if not price:
-        try:
-            html_content = await page.content()
-            schema_matches = re.findall(r'<script type="application/ld\+json">([\s\S]*?)</script>', html_content)
-            
-            for schema in schema_matches:
-                try:
-                    data = json.loads(schema)
-                    if data.get('@type') == 'Product' and 'offers' in data:
-                        offers = data['offers']
-                        if isinstance(offers, dict) and 'price' in offers:
-                            price = f"${offers['price']}"
-                            logger.info(f"Found price in schema data: {price}")
-                            print(f"Found price in schema data: {price}")
-                            break
-                except:
-                    continue
-        except Exception as e:
-            print(f"Error extracting from schema: {str(e)}")
-    
-    # 3. Try to extract price from visible DOM elements
-    if not price:
-        try:
-            # Execute complex DOM traversal in the browser context
-            price_text = await page.evaluate('''
-                () => {
-                    // Try to find price elements
-                    const priceContainers = [
-                        ...document.querySelectorAll('[class*="price-container"]'),
-                        ...document.querySelectorAll('[class*="price"]'),
-                        ...document.querySelectorAll('[data-automation="product-price"]')
-                    ];
-                    
-                    // Filter out warranty prices
-                    for (const container of priceContainers) {
-                        // Skip if container appears to be warranty related
-                        const containerText = container.textContent.toLowerCase();
-                        if (containerText.includes('warranty') || 
-                            containerText.includes('protection plan') ||
-                            containerText.includes('year plan')) {
-                            continue;
-                        }
-                        
-                        // Find a price pattern
-                        const match = container.textContent.match(/\$[\d,]+\.\d{2}/);
-                        if (match) {
-                            return match[0];
-                        }
-                    }
-                    
-                    return null;
-                }
-            ''')
-            
-            if price_text:
-                price = price_text
-                logger.info(f"Found price in DOM: {price}")
-                print(f"Found price in DOM: {price}")
-        except Exception as e:
-            print(f"Error extracting from DOM: {str(e)}")
-    
-    # 4. Last resort: try one more technique with full page text
-    if not price:
-        try:
-            # Get all text from the page and look for price patterns
-            full_text = await page.evaluate('''() => document.body.innerText''')
-            import re
-            # Look for main price patterns (avoiding warranty sections)
-            matches = re.findall(r'\$[\d,]+\.\d{2}', full_text)
-            for match in matches:
-                # Skip if this appears to be in a warranty section
-                idx = full_text.find(match)
-                ctx = full_text[max(0, idx-100):idx+len(match)+100].lower()
-                if not any(w in ctx for w in ['warranty', 'protection', 'plan', 'year plan']):
-                    price = match
-                    logger.info(f"Found price in full text: {price}")
-                    print(f"Found price in full text: {price}")
-                    break
-        except Exception as e:
-            print(f"Error in last resort price extraction: {str(e)}")
-    
-    # Final fallback
     return price.strip() if price else "Price not found"
 
 
@@ -386,7 +295,7 @@ async def extract_description(page: Page, logger: logging.Logger) -> str:
         except Exception:
             continue
     
-    # If we couldn't find the description in structured elements, try generic divs
+    # If couldn't find the description in structured elements, try generic divs
     if not description:
         # Get all divs with substantial text
         try:
@@ -515,43 +424,6 @@ async def extract_rating(page: Page, logger: logging.Logger, title: str) -> str:
     return rating
 
 
-def save_data(products: List[Dict], output_path: str, logger: logging.Logger) -> None:
-    """
-    Save product data to a JSON file.
-    
-    Args:
-        products: List of product dictionaries
-        output_path: Path to save the JSON file
-        logger: Logger instance
-    """
-    # Ensure directory exists
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    
-    logger.info(f"Saving {len(products)} products to {output_path}")
-    
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(products, f, indent=2, ensure_ascii=False)
-    
-    logger.info(f"Data saved to {output_path}")
-
-
-def parse_args() -> argparse.Namespace:
-    """
-    Parse command-line arguments.
-    
-    Returns:
-        Parsed arguments
-    """
-    parser = argparse.ArgumentParser(description="Scrape products from Best Buy")
-    parser.add_argument("--count", type=int, default=10, help="Number of products to scrape")
-    parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
-    parser.add_argument("--visible", action="store_false", dest="headless", help="Run browser in visible mode")
-    parser.add_argument("--source", type=str, default="BestBuy", help="Source name to include in product data")
-    parser.add_argument("--category", type=str, default="Laptops", help="Category to scrape (default: Laptops)")
-    
-    return parser.parse_args()
-
-
 async def extract_features(page: Page, logger: logging.Logger, title: str) -> List[str]:
     """
     Extract product features from the "About this product" section.
@@ -612,6 +484,43 @@ async def extract_features(page: Page, logger: logging.Logger, title: str) -> Li
         logger.info(f"✅ Successfully extracted {len(features_list)} features")
     
     return features_list
+
+    
+def save_data(products: List[Dict], output_path: str, logger: logging.Logger) -> None:
+    """
+    Save product data to a JSON file.
+    
+    Args:
+        products: List of product dictionaries
+        output_path: Path to save the JSON file
+        logger: Logger instance
+    """
+    # Ensure directory exists
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
+    logger.info(f"Saving {len(products)} products to {output_path}")
+    
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(products, f, indent=2, ensure_ascii=False)
+    
+    logger.info(f"Data saved to {output_path}")
+
+
+def parse_args() -> argparse.Namespace:
+    """
+    Parse command-line arguments.
+    
+    Returns:
+        Parsed arguments
+    """
+    parser = argparse.ArgumentParser(description="Scrape products from Best Buy")
+    parser.add_argument("--count", type=int, default=10, help="Number of products to scrape")
+    parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+    parser.add_argument("--visible", action="store_false", dest="headless", help="Run browser in visible mode")
+    parser.add_argument("--source", type=str, default="BestBuy", help="Source name to include in product data")
+    parser.add_argument("--category", type=str, default="Laptops", help="Category to scrape (default: Laptops)")
+    
+    return parser.parse_args()
 
 
 async def scrape_single_product(page: Page, url: str, source: str, logger: logging.Logger, category: str) -> Optional[Dict[str, Any]]:

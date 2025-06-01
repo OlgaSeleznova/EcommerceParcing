@@ -7,6 +7,8 @@ import asyncio
 import os
 import sys
 from playwright.async_api import async_playwright
+import random
+
 
 # Add the parent directory to the path to import from the root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -52,8 +54,12 @@ async def main():
     async with async_playwright() as p:
         # Launch with more robust settings
         browser = await p.chromium.launch(headless=args.headless, timeout=60000)
+        # Select a random user agent from the list
+        selected_user_agent = random.choice(SCRAPER_CONFIG[args.source]["user_agent"])
+        logger.info(f"Using user agent: {selected_user_agent[:50]}...")
+        
         context = await browser.new_context(
-            user_agent=SCRAPER_CONFIG[args.source]["user_agent"],
+            user_agent=selected_user_agent,
             viewport={"width": 1920, "height": 1080},
         )
         
