@@ -48,6 +48,16 @@ EcommerceParcing/
 ├── cloudbuild.yaml             # Cloud Build configuration
 ├── ecommerce_parce/            # Python virtual environment directory
 ```
+## Deployed API
+
+The API is currently deployed and accessible at:
+
+```
+https://ecommerce-api-768918458550.us-central1.run.app
+```
+
+This Cloud Run deployment provides all API endpoints (products listing, product details, and product comparisons) and is automatically scaled based on traffic. The deployment includes integrated Playwright for web scraping and OpenAI for LLM-based content generation.
+
 
 ## Installation
 
@@ -160,10 +170,6 @@ gcloud secrets versions add OPENAI_API_KEY --data-file=- # Enter your API key wh
 7. Deploy to Cloud Run using Cloud Build:
 ```bash
 gcloud builds submit --config=cloudbuild.yaml --substitutions=_OPENAI_API_KEY=YOUR_API_KEY
-```
-
-8. Access your deployed API at the URL provided in the Cloud Run console
-cd EcommerceParcing
 ```
 
 
