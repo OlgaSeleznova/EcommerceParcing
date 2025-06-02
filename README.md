@@ -55,8 +55,9 @@ The API is currently deployed and accessible at:
 ```
 https://ecommerce-api-768918458550.us-central1.run.app
 ```
-
-This Cloud Run deployment provides all API endpoints (products listing, product details, and product comparisons) and is automatically scaled based on traffic. The deployment includes integrated Playwright for web scraping and OpenAI for LLM-based content generation.
+      /products - Get all products with their summaries
+      /products/{product_id} - Get a specific product by ID
+      /products/comparison - Get a comparison of the top 3 rated products
 
 
 ## Installation
